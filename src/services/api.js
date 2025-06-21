@@ -4,7 +4,7 @@ import { useAuthStore } from '@/stores/auth.js'
 
 // On crée une instance d'Axios
 const apiClient = axios.create({
-  baseURL: 'https://127.0.0.1:8000', // L'URL de votre API Symfony
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'https://127.0.0.1:8000',
   headers: {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
