@@ -21,15 +21,20 @@ const isSubmitting = ref(false)
 const isAdmin = computed(() => authStore.user?.roles.includes('ROLE_ADMIN'));
 const isSuperAdmin = computed(() => authStore.user?.roles.includes('ROLE_SUPER_ADMIN'));
 
-
 // --- API Fetching ---
-async function fetchArticle(slug) {
+async function fetchArticle(slug, force=false) {
   isLoading.value = true
   error.value = null
   article.value = null
 
+  const requestConfig = {}
+
+  if (force) {
+    requestConfig.params = { timestamp: new Date().getTime() };
+  }
+
   try {
-    const response = await apiClient.get(`/api/articles/${slug}`)
+    const response = await apiClient.get(`/api/articles/${slug}`, requestConfig)
     article.value = response.data
   } catch (err) {
     error.value = "Impossible de charger l'article. Il n'existe peut-être pas."
@@ -88,20 +93,20 @@ async function handleCommentSubmit() {
     const payload = {
       content: newComment.value,
       // Utilisation de l'@id (IRI) pour lier le commentaire à l'article, c'est la méthode préférée par API Platform
-      article: article.value['@id'],
+      article: `/api/articles/${article.value.slug}`
     }
 
     const response = await apiClient.post('/api/comments', payload)
     const newCommentData = response.data;
 
     await activityLogger.log('INFO', 'User posted a new comment', {
-      articleId: article.value.id,
+      articleId: article.value.slug,
       articleTitle: article.value.title,
       commentId: newCommentData.id
     });
 
     newComment.value = ''
-    await fetchArticle(route.params.slug)
+    await fetchArticle(route.params.slug, true)
 
   } catch (err) {
     console.error('Erreur lors de la soumission du commentaire:', err)
@@ -126,12 +131,13 @@ async function handleDeleteComment(commentId) {
 
   try {
     await apiClient.delete(`/api/comments/${commentId}`)
-    await fetchArticle(route.params.slug)
+    await fetchArticle(route.params.slug, true)
   } catch (err) {
     console.error('Erreur lors de la suppression du commentaire:', err)
     alert('Impossible de supprimer le commentaire. Vous n\'avez peut-être pas les droits nécessaires.')
   }
 }
+
 
 // --- Lifecycle and Watchers ---
 watch(
@@ -239,7 +245,7 @@ function formatDate(dateString) {
             Commentaires ({{ article.comments.length }})
           </h2>
 
-          <div v-if="authStore.isAuthenticated" class="mb-8">
+          <div v-if="authStore.isAuthenticated && authStore.isVerified" class="mb-8">
             <form @submit.prevent="handleCommentSubmit">
               <textarea
                 v-model="newComment"
@@ -262,7 +268,7 @@ function formatDate(dateString) {
               Vous devez être
               <RouterLink to="/login" class="font-medium text-green-700 hover:underline"
               >connecté</RouterLink
-              >
+              > et vérifié
               pour poster un commentaire.
             </p>
           </div>
@@ -302,7 +308,7 @@ function formatDate(dateString) {
                   </div>
 
                   <button
-                    v-if="authStore.isAuthenticated && authStore.user && (isAdmin || isSuperAdmin || authStore.user.email === comment.author.email)"
+                    v-if="authStore.isAuthenticated && authStore.user && (isAdmin || isSuperAdmin || authStore.user.username === comment.author.username)"
                     @click="handleDeleteComment(comment.id)"
                     class="ml-4 text-xs text-red-600 hover:text-red-800 hover:underline focus:outline-none"
                     title="Supprimer ce commentaire"

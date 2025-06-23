@@ -58,7 +58,7 @@ function getExcerpt(content, length = 150) {
         </p>
         <div class="mt-8 flex justify-center">
           <div class="inline-flex rounded-md shadow-lg">
-            <a href="#decouvrir" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-gray-900 bg-white hover:bg-green-200 hc:bg-yellow-300 hc:text-black hc:hover:bg-yellow-400">
+            <a href="#decouvrir" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-gray-900 bg-green-50 hover:bg-green-200 hc:bg-yellow-300 hc:text-black hc:hover:bg-yellow-400">
               Commencer la visite
             </a>
           </div>
@@ -144,25 +144,24 @@ function getExcerpt(content, length = 150) {
 </template>
 
 <style scoped>
-/* Ajoutez ces styles dans votre section <style> */
 .wave-container {
   position: absolute;
-  bottom: -1px; /* Assure que la vague touche exactement le bas */
+  bottom: -1px;
   left: 0;
   width: 100%;
   overflow: hidden;
   line-height: 0;
-  z-index: 20; /* S'assure que la vague est au-dessus de la section suivante */
+  z-index: 20;
 }
 
 .wave-container svg {
   display: block;
   width: 100%;
-  height: 120px; /* Hauteur fixe pour la vague */
-  transform: translateY(1px); /* Petit ajustement pour éviter les espaces blancs */
+  height: 120px; /* Hauteur par défaut pour les grands écrans */
+  transform: translateY(1px);
 }
 
-/* Ajustez votre hero-section */
+/* Ajustement de la hero section pour mobile */
 .hero-section {
   position: relative;
   height: 85vh;
@@ -173,8 +172,35 @@ function getExcerpt(content, length = 150) {
   align-items: center;
   justify-content: center;
   color: white;
-  margin-bottom: -1px; /* Élimine l'espace entre les sections */
+  margin-bottom: -1px;
+  padding-bottom: 80px; /* Espace supplémentaire en bas pour la vague */
 }
+
+/* Media queries pour les appareils mobiles */
+@media (max-width: 768px) {
+  .wave-container svg {
+    height: 60px; /* Hauteur réduite sur mobile */
+  }
+
+  .hero-section {
+    padding-bottom: 50px; /* Espace réduit mais suffisant */
+  }
+}
+
+/* Pour les très petits écrans */
+@media (max-width: 480px) {
+  .wave-container svg {
+    height: 40px; /* Encore plus petit sur très petits écrans */
+  }
+
+  .hero-section {
+    height: auto; /* Hauteur automatique plutôt que vh fixe */
+    min-height: 80vh; /* Hauteur minimale */
+    padding-top: 80px; /* Espace en haut */
+    padding-bottom: 40px; /* Espace en bas */
+  }
+}
+
 .text-shadow-lg { text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
 .text-shadow { text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 </style>

@@ -21,7 +21,6 @@ const searchQuery = ref('');
 const isAdmin = computed(() => authStore.user?.roles.includes('ROLE_ADMIN'));
 const isSuperAdmin = computed(() => authStore.user?.roles.includes('ROLE_SUPER_ADMIN'));
 
-
 // Extrait les 3 articles mis en avant les plus récents pour la section du haut
 const featuredArticles = computed(() =>
   allArticles.value.filter(article => article.isFeatured).slice(0, 3)
@@ -55,7 +54,7 @@ const filteredArticles = computed(() => {
 const archiveYears = computed(() => {
   const years = allArticles.value.map(article => new Date(article.publishedAt).getFullYear());
   return [...new Set(years)].sort((a, b) => b - a);
-});
+}); // TODO
 
 // --- API Fetching ---
 
@@ -85,7 +84,7 @@ async function toggleFeatured(article) {
       title: article.title,
       slug: article.slug,
       content: article.content,
-      category: article.category,
+      category: article.category ? '/api/categories/' + article.category.id : null,
       isFeatured: !article.isFeatured,
       imageUrl: article.imageUrl
     };

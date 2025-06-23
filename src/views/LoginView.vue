@@ -49,6 +49,11 @@ async function handleLogin() {
           <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
           <input v-model="credentials.password" type="password" id="password" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-emerald-500 focus:border-emerald-500">
         </div>
+        <div class="flex items-center justify-end text-sm mt-2">
+          <RouterLink to="/mot-de-passe-oublie" class="font-medium text-green-600 hover:text-green-500 hover:underline">
+            Mot de passe oublié ?
+          </RouterLink>
+        </div>
         <!-- Message d'erreur -->
         <p v-if="errorMessage" class="mt-2 text-sm text-red-600">{{ errorMessage }}</p>
         <!-- Bouton de soumission -->
@@ -58,6 +63,11 @@ async function handleLogin() {
           </button>
         </div>
       </form>
+
+      <p class="mt-4 text-center text-sm text-gray-600">
+        Pas encore de compte ?
+        <RouterLink to="/inscription" class="font-medium text-green-700 hover:underline">Inscrivez-vous</RouterLink>
+      </p>
     </div>
   </div>
 </template>

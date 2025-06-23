@@ -11,6 +11,7 @@ export const useAuthStore = defineStore('auth', {
   getters: {
     isAuthenticated: (state) => !!state.token && !!state.user,
     isAdmin: (state) => state.user?.roles.includes('ROLE_ADMIN'),
+    isVerified: (state) => state.user?.isVerified,
   },
   actions: {
     /**
@@ -34,8 +35,6 @@ export const useAuthStore = defineStore('auth', {
         this.token = token
         this.user = userData
 
-        // CORRECTIF : Le log de connexion est placé ICI et niry part ailleurs.
-        // Il ne s'exécute que lorsque l'API a validé la connexion.
         await activityLogger.log('NOTICE', 'User logged in successfully', {
           email: this.user.email,
         })

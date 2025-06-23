@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Protection des zones administratives et techniques
+Disallow: /admin/
+Disallow: /login/
+Disallow: /verifier-email
+Disallow: /blog/edit/*
+Disallow: /blog/create
+
+# Éviter l'indexation des paramètres d'URL
+Disallow: /*?*
+
+# Protection des requêtes API
+Disallow: /api/*
+
+# Lien vers le sitemap (à ajuster selon votre domaine)
+Sitemap: https://www.naurellia.com/sitemap.xml
+
+# Taux de crawl recommandé
+Crawl-delay: 10

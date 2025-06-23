@@ -15,6 +15,9 @@ import {
 const authStore = useAuthStore();
 const geoapifyApiKey = import.meta.env.VITE_GEOAPIFY_API_KEY;
 
+const initialZoom = 12;
+const initialCenter = [46.195, -1.37];
+
 // --- State ---
 const isLoading = ref(true);
 const error = ref(null);
@@ -29,6 +32,7 @@ const isPickingCoordinates = ref(false);
 const currentPoi = ref({});
 const modalError = ref('');
 const isGeocoding = ref(false);
+const map = ref(null);
 
 // --- NOUVEAU STATE pour la version mobile ---
 const isAsideOpen = ref(false); // Gère l'ouverture/fermeture du panneau latéral sur mobile
@@ -38,16 +42,34 @@ const tileLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tileLayerAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 // --- Fonctions (inchangées) ---
-async function fetchData() {
+
+function recenterMap() {
+  if (map.value) {
+    map.value.leafletObject.flyTo(initialCenter, initialZoom);
+  }
+}
+
+async function fetchData(force = false) {
   isLoading.value = true;
   error.value = null;
+
+  const requestConfig = {
+    params: {
+      'itemsPerPage': 1000
+    }
+  };
+  if (force) {
+    requestConfig.params = { timestamp: new Date().getTime() };
+  }
+
   try {
     const [typesResponse, poisResponse] = await Promise.all([
-      apiClient.get('/api/poi_types'),
-      apiClient.get('/api/point_of_interests')
+      apiClient.get('/api/poi_types', requestConfig),
+      apiClient.get('/api/point_of_interests', requestConfig)
     ]);
     poiTypes.value = typesResponse.data['hydra:member'] || typesResponse.data;
     pointsOfInterest.value = poisResponse.data['hydra:member'] || poisResponse.data;
+
     if (isLoading.value) {
       selectAll();
     }
@@ -85,6 +107,7 @@ function openPoiModal(poi = null, latlng = null) {
   if (poi) {
     currentPoi.value = JSON.parse(JSON.stringify(poi));
     currentPoi.value.type = poi.type.id;
+
   } else {
     currentPoi.value = {
       name: '',
@@ -130,11 +153,11 @@ async function handleMarkerDragEnd(poi, event) {
   try {
     await apiClient.put(`/api/point_of_interests/${poi.id}`, payload);
     await activityLogger.log('NOTICE', 'POI position updated via drag-and-drop', { poiId: poi.id });
-    await fetchData();
+    await fetchData(true);
   } catch (err) {
     alert("La mise à jour de la position a échoué.");
     console.error("Erreur lors de la mise à jour du POI :", err);
-    await fetchData();
+    await fetchData(true);
   }
 }
 
@@ -159,7 +182,7 @@ async function handlePoiSubmit() {
       await apiClient.put(`/api/point_of_interests/${currentPoi.value.id}`, payload);
       await activityLogger.log('NOTICE', 'Admin updated a POI', { poiId: payload.id, name: payload.name });
     }
-    await fetchData();
+    await fetchData(true);
     closePoiModal();
   } catch (err) {
     modalError.value = "Une erreur est survenue. Vérifiez les champs et réessayez.";
@@ -171,7 +194,7 @@ async function handlePoiDelete(poiId) {
   if (!confirm("Êtes-vous sûr de vouloir supprimer ce Point d'Intérêt ?")) return;
   try {
     await apiClient.delete(`/api/point_of_interests/${poiId}`);
-    await fetchData();
+    await fetchData(true);
   } catch (err) {
     alert("Vous n'avez pas les droits suffisants pour supprimer ce POI.");
     console.error("Erreur lors de la suppression du POI :", err);
@@ -261,6 +284,13 @@ onMounted(fetchData);
           </div>
         </div>
 
+        <div class="mt-6 pt-6 border-t">
+          <button @click="recenterMap" class="w-full flex items-center justify-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 text-sm font-semibold">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2"><path d="M9.653 16.915l.005-.003-.011.006.006-.003ZM10 18a8 8 0 100-16 8 8 0 000 16ZM1.5 10a8.5 8.5 0 1117 0 8.5 8.5 0 01-17 0Z" /><path d="M10 4.75a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 4.75Z" /><path d="M10 8a2 2 0 100 4 2 2 0 000-4Z" /></svg>
+            Recentrer la carte
+          </button>
+        </div>
+
         <div v-if="authStore.isAdmin" class="mt-8 pt-6 border-t">
           <h3 class="text-lg font-bold text-gray-800">Administration</h3>
           <div class="mt-4 p-3 bg-gray-100 rounded-lg space-y-4">
@@ -280,7 +310,7 @@ onMounted(fetchData);
         </div>
       </aside>
 
-      <main class="flex-grow h-full" :class="{ 'cursor-crosshair': isEditMode || isPickingCoordinates }">
+      <main class="flex-grow h-full relative z-0" :class="{ 'cursor-crosshair': isEditMode || isPickingCoordinates }">
         <l-map ref="map" v-model:zoom="zoom" :center="center" :use-global-leaflet="false" @click="handleMapClick" class="h-full">
           <l-tile-layer :url="tileLayerUrl" :attribution="tileLayerAttribution"></l-tile-layer>
           <l-marker
@@ -293,9 +323,9 @@ onMounted(fetchData);
             <l-icon :icon-url="getMarkerIconUrl(poi.type)" :icon-size="[38, 52]" :icon-anchor="[19, 50]" :popup-anchor="[0, -50]" />
             <l-popup :min-width="250">
               <div class="font-bold text-lg -mb-1">{{ poi.name }}</div>
-              <p v-if="poi.description" class="mt-2 text-base">{{ poi.description }}</p>
+              <div v-if="poi.description" class="mt-2 text-base prose max-w-none" v-html="poi.description"></div>
               <div v-if="poi.address" class="text-sm text-gray-500 mt-2 border-t pt-2">{{ poi.address }}</div>
-              <div class="mt-4">
+              <div class="mt-4" v-if="poi.type.name !== 'Danger'">
                 <a :href="getDirectionsUrl(poi)" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center w-full px-4 py-2 bg-gray-200 font-semibold text-sm rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
                     <path fill-rule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clip-rule="evenodd" />
