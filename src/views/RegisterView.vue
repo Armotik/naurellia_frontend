@@ -69,38 +69,38 @@ async function handleRegister() {
 </script>
 
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-50 py-12">
-    <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+  <div class="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+    <div class="w-full max-w-md p-8 space-y-6 bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/30">
       <div class="text-center">
-        <h2 class="text-3xl font-extrabold text-gray-900">Créer un compte</h2>
-        <p class="mt-2 text-sm text-gray-600">
+        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Créer un compte</h2>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
           Déjà membre ?
-          <RouterLink to="/login" class="font-medium text-green-700 hover:underline">Connectez-vous</RouterLink>
+          <RouterLink to="/login" class="font-medium text-green-700 hover:underline dark:text-green-500 dark:hover:text-green-400">Connectez-vous</RouterLink>
         </p>
       </div>
 
       <form @submit.prevent="handleRegister" class="space-y-6">
         <div>
-          <label for="username" class="block text-sm font-medium text-gray-700">Nom d'utilisateur</label>
-          <input v-model="formData.username" type="text" id="username" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+          <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nom d'utilisateur</label>
+          <input v-model="formData.username" type="text" id="username" required class="w-full px-3 py-2 mt-1 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-green-500 focus:border-green-500 dark:focus:ring-green-600 dark:focus:border-green-600">
         </div>
 
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-          <input v-model="formData.email" type="email" id="email" required autocomplete="email" class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+          <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+          <input v-model="formData.email" type="email" id="email" required autocomplete="email" class="w-full px-3 py-2 mt-1 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-green-500 focus:border-green-500 dark:focus:ring-green-600 dark:focus:border-green-600">
         </div>
 
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
-          <input v-model="formData.password" type="password" id="password" required autocomplete="new-password" class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+          <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mot de passe</label>
+          <input v-model="formData.password" type="password" id="password" required autocomplete="new-password" class="w-full px-3 py-2 mt-1 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-green-500 focus:border-green-500 dark:focus:ring-green-600 dark:focus:border-green-600">
         </div>
 
         <div>
-          <label for="confirm-password" class="block text-sm font-medium text-gray-700">Confirmer le mot de passe</label>
-          <input v-model="formData.confirmPassword" type="password" id="confirm-password" required autocomplete="new-password" class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+          <label for="confirm-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Confirmer le mot de passe</label>
+          <input v-model="formData.confirmPassword" type="password" id="confirm-password" required autocomplete="new-password" class="w-full px-3 py-2 mt-1 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm dark:bg-gray-700 dark:text-white focus:ring-green-500 focus:border-green-500 dark:focus:ring-green-600 dark:focus:border-green-600">
         </div>
 
-        <div v-if="errorMessage" class="p-3 bg-red-50 text-red-700 rounded-md">
+        <div v-if="errorMessage" class="p-3 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-md">
           <p class="text-sm whitespace-pre-line">{{ errorMessage }}</p>
         </div>
 
@@ -108,7 +108,7 @@ async function handleRegister() {
           <button
             type="submit"
             :disabled="isLoading"
-            class="w-full flex justify-center px-4 py-3 text-white bg-green-700 rounded-md hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-green-400"
+            class="w-full flex justify-center px-4 py-3 text-white bg-green-700 dark:bg-green-600 rounded-md hover:bg-green-800 dark:hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-800 disabled:bg-green-400"
           >
             {{ isLoading ? 'Création en cours...' : 'Créer mon compte' }}
           </button>

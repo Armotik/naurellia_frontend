@@ -114,15 +114,15 @@ onMounted(fetchData);
 </script>
 
 <template>
-  <div class="bg-gray-50 py-12">
+  <div class="bg-gray-50 dark:bg-gray-900 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="bg-white p-8 rounded-lg shadow-md">
-        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 mb-6">
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md dark:shadow-gray-900/20">
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 mb-6">
           {{ isEditMode ? 'Modifier l\'article' : 'Créer un nouvel article' }}
         </h1>
 
-        <div v-if="isLoading" class="text-center"><p>Chargement du formulaire...</p></div>
-        <div v-else-if="error" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+        <div v-if="isLoading" class="text-center dark:text-gray-300"><p>Chargement du formulaire...</p></div>
+        <div v-else-if="error" class="bg-red-100 dark:bg-red-900/30 border-l-4 border-red-500 text-red-700 dark:text-red-400 p-4" role="alert">
           <p class="font-bold">Erreur</p>
           <p>{{ error }}</p>
         </div>
@@ -130,20 +130,20 @@ onMounted(fetchData);
         <form v-else @submit.prevent="handleSubmit" class="space-y-8">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label for="title" class="block text-sm font-medium text-gray-700">Titre</label>
-              <input type="text" v-model="article.title" id="title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+              <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Titre</label>
+              <input type="text" v-model="article.title" id="title" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:text-gray-100" required>
             </div>
             <div>
-              <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-              <input type="text" v-model="article.slug" id="slug" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 bg-gray-50" :readonly="isEditMode" required>
+              <label for="slug" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Slug</label>
+              <input type="text" v-model="article.slug" id="slug" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-green-500 focus:ring-green-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-100" :readonly="isEditMode" required>
             </div>
             <div>
-              <label for="imageUrl" class="block text-sm font-medium text-gray-700">URL de l'image (optionnel)</label>
-              <input type="url" v-model="article.imageUrl" id="imageUrl" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500">
+              <label for="imageUrl" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL de l'image (optionnel)</label>
+              <input type="url" v-model="article.imageUrl" id="imageUrl" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:text-gray-100">
             </div>
             <div>
-              <label for="category" class="block text-sm font-medium text-gray-700">Catégorie</label>
-              <select v-model="article.category" id="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500" required>
+              <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Catégorie</label>
+              <select v-model="article.category" id="category" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 shadow-sm focus:border-green-500 focus:ring-green-500 dark:bg-gray-700 dark:text-gray-100" required>
                 <option :value="null" disabled>-- Choisir une catégorie --</option>
                 <option v-for="cat in categories" :key="cat.id" :value="`/api/categories/${cat.id}`">{{ cat.name }}</option>
               </select>
@@ -151,10 +151,10 @@ onMounted(fetchData);
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Contenu de l'article (HTML)</label>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 border border-gray-300 rounded-lg p-1">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Contenu de l'article (HTML)</label>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 border border-gray-300 dark:border-gray-700 rounded-lg p-1 dark:bg-gray-800">
               <div>
-                <h3 class="text-xs font-semibold text-gray-500 uppercase p-2">Éditeur HTML</h3>
+                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase p-2">Éditeur HTML</h3>
                 <Codemirror
                   v-model="article.content"
                   placeholder="Écrivez votre code HTML ici..."
@@ -164,23 +164,24 @@ onMounted(fetchData);
                   :tab-size="2"
                   :extensions="extensions"
                   @change="(value) => article.content = value"
+                  class="dark:cm-s-dark"
                 />
               </div>
-              <div class="bg-white rounded-md border border-gray-200">
-                <h3 class="text-xs font-semibold text-gray-500 uppercase p-2 border-b">Prévisualisation en direct</h3>
-                <div class="p-4" v-html="article.content"></div>
+              <div class="bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600">
+                <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase p-2 border-b dark:border-gray-600">Prévisualisation en direct</h3>
+                <div class="p-4 dark:text-gray-100 preview-content" v-html="article.content"></div>
               </div>
             </div>
           </div>
 
           <div class="flex items-center pt-4">
-            <input v-model="article.isFeatured" id="isFeatured" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500">
-            <label for="isFeatured" class="ml-2 block text-sm text-gray-900">Mettre en avant cet article ?</label>
+            <input v-model="article.isFeatured" id="isFeatured" type="checkbox" class="h-4 w-4 rounded border-gray-300 dark:border-gray-700 text-green-600 focus:ring-green-500 dark:bg-gray-700">
+            <label for="isFeatured" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Mettre en avant cet article ?</label>
           </div>
 
           <div class="flex justify-end space-x-4">
-            <RouterLink to="/blog" type="button" class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Annuler</RouterLink>
-            <button type="submit" :disabled="isSaving" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-green-400">
+            <RouterLink to="/blog" type="button" class="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">Annuler</RouterLink>
+            <button type="submit" :disabled="isSaving" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-green-400 dark:focus:ring-offset-gray-900">
               {{ isSaving ? 'Enregistrement...' : (isEditMode ? 'Mettre à jour' : 'Publier') }}
             </button>
           </div>
@@ -198,5 +199,47 @@ onMounted(fetchData);
 .cm-scroller {
   border: 1px solid #e5e7eb;
   border-radius: 0.375rem;
+}
+
+/* Styles pour CodeMirror en mode sombre */
+.dark .cm-editor {
+  background-color: #1f2937;
+  color: #f3f4f6;
+}
+
+.dark .cm-scroller {
+  border-color: #4b5563;
+}
+
+.dark .cm-gutters {
+  background-color: #374151;
+  color: #9ca3af;
+  border-color: #4b5563;
+}
+
+.dark .cm-activeLine {
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+.dark .cm-activeLineGutter {
+  background-color: #4b5563;
+}
+
+/* Styles pour la prévisualisation en mode sombre */
+.dark .preview-content h1,
+.dark .preview-content h2,
+.dark .preview-content h3,
+.dark .preview-content h4,
+.dark .preview-content h5,
+.dark .preview-content h6 {
+  color: #f3f4f6;
+}
+
+.dark .preview-content p {
+  color: #d1d5db;
+}
+
+.dark .preview-content a {
+  color: #60a5fa;
 }
 </style>

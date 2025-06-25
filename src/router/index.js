@@ -1,52 +1,48 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.js'
 
-import HomeView from '../views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import BlogView from '@/views/BlogView.vue'
-import ArticleDetailView from '@/views/ArticleDetailView.vue'
-import ContactView from '@/views/ContactView.vue'
-import PartnersView from '@/views/PartnersView.vue'
-import BecomePartnerView from '@/views/BecomePartnerView.vue'
-import LegalMentionsView from '@/views/LegalMentionsView.vue'
-import PrivacyPolicyView from '@/views/PrivacyPolicyView.vue'
-import TermsAndConditionsView from '@/views/TermsAndConditionsView.vue'
-import InteractiveMapView from '@/views/InteractiveMapView.vue'
-import WipView from '@/views/WipView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
-import ArticleFormView from '@/views/admin/ArticleFormView.vue'
-import RegisterView from '@/views/RegisterView.vue'
-import VerifyEmailNoticeView from '@/views/VerifyEmailNoticeView.vue'
-import ChangePasswordView from '@/views/ChangePasswordView.vue'
-import AccountView from '@/views/account/AccountView.vue'
-import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue'
-import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
-import dashboardLayout from '@/views/admin/DashboardLayout.vue'
-import AdminHomeView from '@/views/admin/AdminHomeView.vue'
-import LogsView from '@/views/admin/LogsView.vue'
-import SessionTrackerView from '@/views/admin/SessionTrackerView.vue'
-import UserManagementView from '@/views/admin/UserManagementView.vue'
+
+const HomeView = () => import('@/views/HomeView.vue')
+const LoginView = () => import('@/views/LoginView.vue')
+const BlogView = () => import('@/views/BlogView.vue')
+const ArticleDetailView = () => import('@/views/ArticleDetailView.vue')
+const ContactView = () => import('@/views/ContactView.vue')
+const PartnersView = () => import('@/views/PartnersView.vue')
+const BecomePartnerView = () => import('@/views/BecomePartnerView.vue')
+const LegalMentionsView = () => import('@/views/LegalMentionsView.vue')
+const PrivacyPolicyView = () => import('@/views/PrivacyPolicyView.vue')
+const TermsAndConditionsView = () => import('@/views/TermsAndConditionsView.vue')
+const InteractiveMapView = () => import('@/views/InteractiveMapView.vue')
+const WipView = () => import('@/views/WipView.vue')
+const NotFoundView = () => import('@/views/NotFoundView.vue')
+const ArticleFormView = () => import('@/views/admin/ArticleFormView.vue')
+const RegisterView = () => import('@/views/RegisterView.vue')
+const VerifyEmailNoticeView = () => import('@/views/VerifyEmailNoticeView.vue')
+const ChangePasswordView = () => import('@/views/ChangePasswordView.vue')
+const AccountView = () => import('@/views/account/AccountView.vue')
+const ForgotPasswordView = () => import('@/views/auth/ForgotPasswordView.vue')
+const ResetPasswordView = () => import('@/views/auth/ResetPasswordView.vue')
+const DashboardLayout = () => import('@/views/admin/DashboardLayout.vue')
+const AdminHomeView = () => import('@/views/admin/AdminHomeView.vue')
+const LogsView = () => import('@/views/admin/LogsView.vue')
+const SessionTrackerView = () => import('@/views/admin/SessionTrackerView.vue')
+const UserManagementView = () => import('@/views/admin/UserManagementView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    }
-    else {
-      return { top: 0, left: 0 }
-    }
-  },
-
   routes: [
     {
       path: '/',
       name: 'home',
       component: HomeView,
       meta: {
-        title: 'Accueil',
-        description: 'Bienvenue sur notre site. Découvrez nos services et notre communauté.'
+        title: 'Naurellia - Tourisme durable sur l\'Île de Ré',
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Naurellia - Découvrez l\'Île de Ré de manière responsable. Informations, conseils et ressources pour un tourisme durable et respectueux.'
+          }
+        ]
       }
     },
     {
@@ -63,8 +59,13 @@ const router = createRouter({
       name: 'blog',
       component: BlogView,
       meta: {
-        title: 'Blog',
-        description: 'Découvrez nos derniers articles et actualités sur notre blog.'
+        title: 'Blog - Naurellia',
+        metaTags: [
+          {
+            name: 'description',
+            content: 'Articles et ressources sur le tourisme durable et responsable sur l\'Île de Ré.'
+          }
+        ]
       }
     },
     {
@@ -253,7 +254,7 @@ const router = createRouter({
     },
     {
       path: '/admin',
-      component: dashboardLayout,
+      component: DashboardLayout,
       meta: {
         requiresAuth: true,
         requiresAdmin: true,
@@ -305,6 +306,30 @@ const router = createRouter({
     }
   ],
 })
+
+// Mise à jour du titre et des métadonnées pour chaque navigation
+router.beforeEach((to, from, next) => {
+  // Mise à jour du titre
+  document.title = to.meta.title || 'Naurellia';
+
+  // Suppression des meta tags précédents
+  const metaTags = document.querySelectorAll('meta[data-vue-router-controlled]');
+  metaTags.forEach(tag => tag.remove());
+
+  // Ajout des nouveaux meta tags
+  if (to.meta.metaTags) {
+    to.meta.metaTags.forEach(tagDef => {
+      const tag = document.createElement('meta');
+      Object.keys(tagDef).forEach(key => {
+        tag.setAttribute(key, tagDef[key]);
+      });
+      tag.setAttribute('data-vue-router-controlled', '');
+      document.head.appendChild(tag);
+    });
+  }
+
+  next();
+});
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()

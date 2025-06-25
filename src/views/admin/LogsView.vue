@@ -27,6 +27,24 @@ let searchTimeout = null;
 
 // --- Fonctions ---
 
+// Fonction pour déterminer la classe CSS en fonction du niveau de log
+function getLogLevelClass(level) {
+  switch (level) {
+    case 'INFO':
+      return 'text-blue-600 dark:text-blue-400';
+    case 'NOTICE':
+      return 'text-green-600 dark:text-green-400';
+    case 'WARNING':
+      return 'text-yellow-600 dark:text-yellow-400';
+    case 'ERROR':
+      return 'text-red-600 dark:text-red-400';
+    case 'CRITICAL':
+      return 'text-purple-700 dark:text-purple-400';
+    default:
+      return 'text-gray-600 dark:text-gray-400';
+  }
+}
+
 // Fonction principale pour récupérer les logs
 async function fetchLogs(page = 1) {
   isLoading.value = true;
@@ -99,13 +117,13 @@ function formatDate(dateString) {
 </script>
 
 <template>
-  <div>
-    <h1 class="text-3xl font-bold text-gray-900 mb-2">Explorateur de Logs</h1>
-    <p class="text-gray-600 mb-8">Analysez toutes les activités du site en détail.</p>
+  <div class="dark:bg-gray-900">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Explorateur de Logs</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8">Analysez toutes les activités du site en détail.</p>
 
-    <div class="p-4 bg-white rounded-lg shadow-sm mb-8">
+    <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/10 mb-8">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <select v-model="filters.level" class="block w-full rounded-md border-gray-300 shadow-sm">
+        <select v-model="filters.level" class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white">
           <option value="">Tous les Niveaux</option>
           <option value="INFO">INFO</option>
           <option value="NOTICE">NOTICE</option>
@@ -113,49 +131,49 @@ function formatDate(dateString) {
           <option value="ERROR">ERROR</option>
           <option value="CRITICAL">CRITICAL</option>
         </select>
-        <input v-model.lazy="filters.ip" type="text" placeholder="Filtrer par IP..." class="block w-full rounded-md border-gray-300 shadow-sm">
-        <input v-model="filters.message" type="text" placeholder="Chercher dans les messages..." class="block w-full rounded-md border-gray-300 shadow-sm">
+        <input v-model.lazy="filters.ip" type="text" placeholder="Filtrer par IP..." class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white dark:placeholder-gray-400">
+        <input v-model="filters.message" type="text" placeholder="Chercher dans les messages..." class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white dark:placeholder-gray-400">
       </div>
     </div>
 
     <div v-if="isLoading" class="text-center py-16">
-      <p class="text-gray-500">Chargement des logs...</p>
+      <p class="text-gray-500 dark:text-gray-400">Chargement des logs...</p>
     </div>
-    <div v-else-if="error" class="bg-red-50 p-4 rounded-md text-red-700">{{ error }}</div>
+    <div v-else-if="error" class="bg-red-50 dark:bg-red-900/20 p-4 rounded-md text-red-700 dark:text-red-400">{{ error }}</div>
 
-    <div v-else class="bg-white rounded-lg shadow-sm overflow-hidden">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+    <div v-else class="bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/10 overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead class="bg-gray-50 dark:bg-gray-700">
         <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Niveau</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source (IP)</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Niveau</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Utilisateur</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Action</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Source (IP)</th>
         </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
+        <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
         <tr v-if="logs.length === 0">
-          <td colspan="5" class="px-6 py-16 text-center text-gray-500">Aucun log ne correspond à vos critères.</td>
+          <td colspan="5" class="px-6 py-16 text-center text-gray-500 dark:text-gray-400">Aucun log ne correspond à vos critères.</td>
         </tr>
-        <tr v-for="log in logs" :key="log.id" class="hover:bg-gray-50">
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ formatDate(log.created_at) }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold">{{ log.level }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ log.user?.email || 'Anonyme' }}</td>
-          <td class="px-6 py-4 text-sm text-gray-800">{{ log.message }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ log.context.request?.ip || 'N/A' }}</td>
+        <tr v-for="log in logs" :key="log.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ formatDate(log.created_at) }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold" :class="getLogLevelClass(log.level)">{{ log.level }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ log.user?.email || 'Anonyme' }}</td>
+          <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ log.message }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ log.context.request?.ip || 'N/A' }}</td>
         </tr>
         </tbody>
       </table>
     </div>
 
     <div class="mt-6 flex items-center justify-between">
-      <div class="text-sm text-gray-700">
+      <div class="text-sm text-gray-700 dark:text-gray-300">
         Page <span class="font-medium">{{ currentPage }}</span> sur <span class="font-medium">{{ totalPages }}</span> ({{ totalLogs }} résultats)
       </div>
       <div class="flex gap-2">
-        <button @click="goToPage(currentPage - 1)" :disabled="currentPage <= 1" class="px-4 py-2 text-sm font-medium bg-white border rounded-md disabled:opacity-50">Précédent</button>
-        <button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages" class="px-4 py-2 text-sm font-medium bg-white border rounded-md disabled:opacity-50">Suivant</button>
+        <button @click="goToPage(currentPage - 1)" :disabled="currentPage <= 1" class="px-4 py-2 text-sm font-medium bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-600">Précédent</button>
+        <button @click="goToPage(currentPage + 1)" :disabled="currentPage >= totalPages" class="px-4 py-2 text-sm font-medium bg-white dark:bg-gray-700 border dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-200 disabled:opacity-50 hover:bg-gray-50 dark:hover:bg-gray-600">Suivant</button>
       </div>
     </div>
   </div>

@@ -1,15 +1,42 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 <head>
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-5XXK7HRN');</script>
-  <!-- End Google Tag Manager -->
-
   <meta charset="UTF-8">
+  <!-- Google Tag Manager - Chargement différé -->
+  <script>
+    // Fonction pour charger GTM de façon différée
+    function loadGTM() {
+      const script = document.createElement('script');
+      script.textContent = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5XXK7HRN');`;
+
+      // Ajouter le script au document
+      document.head.appendChild(script);
+
+      // Ajouter l'iframe noscript
+      const noscript = document.createElement('noscript');
+      const iframe = document.createElement('iframe');
+      iframe.src = "https://www.googletagmanager.com/ns.html?id=GTM-5XXK7HRN";
+      iframe.height = "0";
+      iframe.width = "0";
+      iframe.style.display = "none";
+      iframe.style.visibility = "hidden";
+      noscript.appendChild(iframe);
+      document.body.prepend(noscript);
+    }
+
+    // Charger GTM de façon différée après que le contenu principal est chargé
+    if (window.requestIdleCallback) {
+      requestIdleCallback(loadGTM, { timeout: 2000 });
+    } else {
+      // Fallback pour les navigateurs qui ne supportent pas requestIdleCallback
+      setTimeout(loadGTM, 1500);
+    }
+  </script>
+  <!-- End Google Tag Manager -->
   <title>Naurellia - Tourisme Écologique</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,13 +67,28 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="#000000">
   <meta name="msapplication-starturl" content="/">
   <meta name="msapplication-TileColor" content="#000000">
+
+  <!-- Meta tags pour SEO -->
+  <meta name="description" content="Naurellia - Découvrez l'Île de Ré de manière responsable. Informations, conseils et ressources pour un tourisme durable et respectueux.">
+  <meta name="author" content="Naurellia">
+  <meta name="keywords" content="Île de Ré, tourisme durable, écotourisme, voyage responsable, nature, environnement">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.naurellia.com/">
+  <meta property="og:title" content="Naurellia - Tourisme durable sur l'Île de Ré">
+  <meta property="og:description" content="Découvrez l'Île de Ré de manière responsable. Informations, conseils et ressources pour un tourisme durable et respectueux.">
+  <meta property="og:image" content="https://www.naurellia.com/logo-social.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://www.naurellia.com/">
+  <meta property="twitter:title" content="Naurellia - Tourisme durable sur l'Île de Ré">
+  <meta property="twitter:description" content="Découvrez l'Île de Ré de manière responsable. Informations, conseils et ressources pour un tourisme durable et respectueux.">
+  <meta property="twitter:image" content="https://www.naurellia.com/logo-social.png">
 </head>
   <body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5XXK7HRN"
-                    height="0" width="0" style="display:none;visibility:hidden"></iframe>
-  </noscript>
-  <!-- End Google Tag Manager (noscript) -->
+    <!-- L'iframe noscript GTM sera ajouté dynamiquement -->
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>

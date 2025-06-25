@@ -48,13 +48,13 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="bg-white py-16 px-4 sm:px-6 lg:px-8">
+  <div class="bg-white dark:bg-gray-800 py-16 px-4 sm:px-6 lg:px-8">
     <div class="relative max-w-xl mx-auto">
       <div class="text-center">
-        <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+        <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
           Nous Contacter
         </h2>
-        <p class="mt-4 text-lg leading-6 text-gray-500">
+        <p class="mt-4 text-lg leading-6 text-gray-500 dark:text-gray-400">
           Une question, une suggestion, ou une proposition de partenariat ? N'hésitez pas à nous laisser un message.
         </p>
       </div>
@@ -62,42 +62,42 @@ async function handleSubmit() {
         <form @submit.prevent="handleSubmit" class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
 
           <div class="sm:col-span-2">
-            <label for="name" class="block text-sm font-medium text-gray-700">Nom complet</label>
+            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nom complet</label>
             <div class="mt-1">
-              <input v-model="formData.name" type="text" name="name" id="name" required autocomplete="name" class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 rounded-md">
+              <input v-model="formData.name" type="text" name="name" id="name" required autocomplete="name" class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
             </div>
           </div>
 
           <div class="sm:col-span-2">
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
             <div class="mt-1">
-              <input v-model="formData.email" id="email" name="email" type="email" required autocomplete="email" class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 rounded-md">
+              <input v-model="formData.email" id="email" name="email" type="email" required autocomplete="email" class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
             </div>
           </div>
 
           <div class="sm:col-span-2">
-            <label for="subject" class="block text-sm font-medium text-gray-700">Sujet</label>
+            <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sujet</label>
             <div class="mt-1">
-              <input v-model="formData.subject" type="text" name="subject" id="subject" required class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 rounded-md">
+              <input v-model="formData.subject" type="text" name="subject" id="subject" required class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
             </div>
           </div>
 
           <div class="sm:col-span-2">
-            <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
             <div class="mt-1">
-              <textarea v-model="formData.message" id="message" name="message" rows="4" required class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border border-gray-300 rounded-md"></textarea>
+              <textarea v-model="formData.message" id="message" name="message" rows="4" required class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md"></textarea>
             </div>
           </div>
 
-          <div v-if="successMessage" class="sm:col-span-2 p-4 bg-green-50 text-green-700 rounded-md">
+          <div v-if="successMessage" class="sm:col-span-2 p-4 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-md">
             {{ successMessage }}
           </div>
-          <div v-if="errorMessage" class="sm:col-span-2 p-4 bg-red-50 text-red-700 rounded-md">
+          <div v-if="errorMessage" class="sm:col-span-2 p-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-md">
             {{ errorMessage }}
           </div>
 
           <div class="sm:col-span-2">
-            <button type="submit" :disabled="isLoading" class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-green-400">
+            <button type="submit" :disabled="isLoading" class="w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-800 disabled:bg-green-400">
               {{ isLoading ? 'Envoi en cours...' : 'Envoyer le message' }}
             </button>
           </div>

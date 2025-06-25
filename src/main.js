@@ -3,23 +3,33 @@ import 'leaflet/dist/leaflet.css';
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { useThemeStore } from './stores/theme'
 
 import App from './App.vue'
 import router from './router'
 
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
+// Importer uniquement le VSkeletonLoader au lieu de tous les composants
+import { VSkeletonLoader } from 'vuetify/components'
 import { createVuetify } from 'vuetify'
+import lazyBackground from './directives/lazyBackgroundDirective';
 
 const vuetify = createVuetify({
-  components,
-  directives,
+  components: {
+    VSkeletonLoader
+  },
+  // Conserver les directives nécessaires si vous en utilisez
+  directives: {},
 })
 
 const app = createApp(App)
 
 app.use(createPinia())
+
+const themeStore = useThemeStore();
+themeStore.initTheme();
+
 app.use(router)
 app.use(vuetify)
+app.directive('lazy-background', lazyBackground);
 
 app.mount('#app')
