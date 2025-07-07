@@ -321,7 +321,7 @@ function extractUserInfoFromLog(log) {
             <button
               @click="goToPage(currentPage - 1)"
               :disabled="currentPage === 1"
-              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50"
+              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Précédent
             </button>
@@ -330,10 +330,10 @@ function extractUserInfoFromLog(log) {
                 v-for="page in totalPages"
                 :key="page"
                 @click="goToPage(page)"
-                class="px-3 py-1 rounded"
+                class="px-3 py-1 rounded transition-colors"
                 :class="{
-                  'bg-blue-500 text-white': page === currentPage,
-                  'bg-gray-200 dark:bg-gray-700': page !== currentPage
+                  'bg-blue-500 text-white hover:bg-blue-600': page === currentPage,
+                  'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600': page !== currentPage
                 }"
               >
                 {{ page }}
@@ -342,7 +342,7 @@ function extractUserInfoFromLog(log) {
             <button
               @click="goToPage(currentPage + 1)"
               :disabled="currentPage === totalPages"
-              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50"
+              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Suivant
             </button>
@@ -363,43 +363,99 @@ function extractUserInfoFromLog(log) {
               <li
                 v-for="log in group.logs"
                 :key="log.id"
-                class="border-b dark:border-gray-700 pb-2"
+                class="border-l-4 border-blue-200 dark:border-blue-600 pl-4 pb-3 bg-gray-50 dark:bg-gray-800 rounded-r-lg"
               >
-                <div class="flex justify-between items-start">
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    {{ formatDate(log.created_at) }}
+                <!-- En-tête du log avec timestamp et niveau -->
+                <div class="flex justify-between items-start mb-2">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+                      {{ formatDate(log.created_at) }}
+                    </span>
+                    <span
+                      class="px-2 py-0.5 rounded-full text-xs font-medium"
+                      :class="{
+                        'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200': log.level === 'ERROR',
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200': log.level === 'WARNING',
+                        'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200': log.level === 'NOTICE',
+                        'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200': log.level === 'INFO',
+                        'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200': !log.level || log.level === 'DEBUG'
+                      }"
+                    >
+                      {{ log.level || 'INFO' }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Message principal du log -->
+                <div class="mb-3">
+                  <h4 class="font-medium text-gray-900 dark:text-gray-100 text-sm mb-1">Message :</h4>
+                  <p class="text-gray-700 dark:text-gray-300 text-sm bg-white dark:bg-gray-700 p-2 rounded border">
+                    {{ log.message }}
                   </p>
                 </div>
-                <p class="font-medium text-gray-900 dark:text-gray-200">{{ log.message }}</p>
 
-                <!-- Affichage condensé du contexte -->
-                <div class="mt-1 p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
-                  <div
+                <!-- Bouton pour afficher/masquer le contexte -->
+                <div class="flex items-center justify-between">
+                  <button
                     v-if="log.context"
-                    class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-600 dark:text-gray-300"
+                    @click="log.showFullContext = !log.showFullContext"
+                    class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
                   >
-                    <p v-if="log.context.path">
-                      <span class="font-medium">Page:</span> {{ log.context.path }}
-                    </p>
-                    <p v-if="log.context.name">
-                      <span class="font-medium">Route:</span> {{ log.context.name }}
-                    </p>
-
-                    <!-- Bouton pour afficher le contexte complet -->
-                    <button
-                      @click="log.showFullContext = !log.showFullContext"
-                      class="text-blue-600 dark:text-blue-400 hover:underline text-xs mt-1"
+                    <svg
+                      class="w-3 h-3 mr-1 transition-transform duration-200"
+                      :class="{ 'rotate-180': log.showFullContext }"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      {{ log.showFullContext ? 'Masquer détails' : 'Afficher détails' }}
-                    </button>
-                  </div>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                    {{ log.showFullContext ? 'Masquer le contexte' : 'Afficher le contexte' }}
+                  </button>
+                  <span v-else class="text-xs text-gray-400 dark:text-gray-500 italic">
+                    Aucun contexte disponible
+                  </span>
+                </div>
 
-                  <!-- Contexte complet (affiché/caché) -->
-                  <pre
-                    v-if="log.showFullContext"
-                    class="text-xs bg-gray-100 dark:bg-gray-700 p-2 mt-2 rounded overflow-x-auto dark:text-gray-300"
-                    >{{ JSON.stringify(log.context, null, 2) }}</pre
-                  >
+                <!-- Contexte détaillé (affiché/caché avec animation) -->
+                <div
+                  v-if="log.context"
+                  class="mt-3 overflow-hidden transition-all duration-300"
+                  :class="{ 'max-h-0': !log.showFullContext, 'max-h-96': log.showFullContext }"
+                >
+                  <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-3 border">
+                    <h5 class="font-medium text-gray-800 dark:text-gray-200 text-xs mb-2 uppercase tracking-wide">
+                      Contexte détaillé :
+                    </h5>
+
+                    <!-- Informations principales du contexte -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3 text-xs">
+                      <div v-if="log.context.path" class="bg-white dark:bg-gray-600 p-2 rounded">
+                        <span class="font-medium text-gray-600 dark:text-gray-300">Chemin :</span>
+                        <span class="text-gray-800 dark:text-gray-100 ml-1">{{ log.context.path }}</span>
+                      </div>
+                      <div v-if="log.context.name" class="bg-white dark:bg-gray-600 p-2 rounded">
+                        <span class="font-medium text-gray-600 dark:text-gray-300">Route :</span>
+                        <span class="text-gray-800 dark:text-gray-100 ml-1">{{ log.context.name }}</span>
+                      </div>
+                      <div v-if="log.context.method" class="bg-white dark:bg-gray-600 p-2 rounded">
+                        <span class="font-medium text-gray-600 dark:text-gray-300">Méthode :</span>
+                        <span class="text-gray-800 dark:text-gray-100 ml-1">{{ log.context.method }}</span>
+                      </div>
+                      <div v-if="log.context.userAgent" class="bg-white dark:bg-gray-600 p-2 rounded col-span-full">
+                        <span class="font-medium text-gray-600 dark:text-gray-300">User Agent :</span>
+                        <span class="text-gray-800 dark:text-gray-100 ml-1 break-all">{{ log.context.userAgent }}</span>
+                      </div>
+                    </div>
+
+                    <!-- JSON complet du contexte -->
+                    <details class="mt-2">
+                      <summary class="cursor-pointer text-xs font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100">
+                        Voir le JSON complet du contexte
+                      </summary>
+                      <pre class="text-xs bg-white dark:bg-gray-800 p-3 mt-2 rounded border overflow-x-auto text-gray-700 dark:text-gray-300 max-h-64 overflow-y-auto">{{ JSON.stringify(log.context, null, 2) }}</pre>
+                    </details>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -410,17 +466,17 @@ function extractUserInfoFromLog(log) {
             <button
               @click="goToPage(currentPage - 1)"
               :disabled="currentPage === 1"
-              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50"
+              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Précédent
             </button>
-            <div>
+            <div class="text-gray-700 dark:text-gray-300">
               Page {{ currentPage }} sur {{ totalPages }}
             </div>
             <button
               @click="goToPage(currentPage + 1)"
               :disabled="currentPage === totalPages"
-              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50"
+              class="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 rounded disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Suivant
             </button>

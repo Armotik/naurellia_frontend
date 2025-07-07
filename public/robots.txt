@@ -16,6 +16,7 @@ Disallow: /api/*
 
 # Lien vers le sitemap (à ajuster selon votre domaine)
 Sitemap: https://www.naurellia.com/sitemap.xml
+Sitemap: https://www.naurellia.com/image-sitemap.xml
 
 # Taux de crawl recommandé
 Crawl-delay: 10

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import apiClient from '@/services/api';
+import { activityLogger } from '@/services/activityLogger';
 
 const users = ref([]);
 const isLoading = ref(true);
@@ -35,15 +36,91 @@ function openEditModal(user) {
   isModalOpen.value = true;
 }
 
+async function toggleVerifiedStatus(user) {
+  try {
+    const payload = { isVerified: !user.isVerified };
+    await apiClient.patch(`/api/users/${user.id}`, payload, {
+      headers: {
+        'Content-Type': 'application/merge-patch+json'
+      }
+    });
+    user.isVerified = !user.isVerified;
+  } catch (err) {
+    console.error("Erreur lors du changement de statut de vérification:", err);
+    alert("La modification a échoué.");
+  }
+}
+
+async function toggleBannedStatus(user) {
+  if (isUserAdmin(user)) {
+    alert("Impossible de bannir un administrateur.");
+    return;
+  }
+
+  const wasBanned = user.isBanned;
+  const action = wasBanned ? 'débannissement' : 'bannissement';
+
+  try {
+    const payload = { isBanned: !user.isBanned };
+    await apiClient.patch(`/api/users/${user.id}`, payload, {
+      headers: {
+        'Content-Type': 'application/merge-patch+json'
+      }
+    });
+    user.isBanned = !user.isBanned;
+
+    // Logger l'action de bannissement/débannissement
+    await activityLogger.log('INFO', `${action.charAt(0).toUpperCase() + action.slice(1)} d'utilisateur effectué`, {
+      targetUserId: user.id,
+      targetUsername: user.username,
+      targetEmail: user.email,
+      action: action,
+      newStatus: user.isBanned ? 'banni' : 'actif',
+      method: 'toggle_quick'
+    });
+
+  } catch (err) {
+    console.error("Erreur lors du changement de statut de bannissement:", err);
+    alert("La modification a échoué.");
+  }
+}
+
 async function handleUpdateUser() {
   if (!currentUser.value) return;
+
+  // Vérifier si on essaie de bannir un admin
+  if (currentUser.value.isBanned && isUserAdmin(currentUser.value)) {
+    alert("Impossible de bannir un administrateur.");
+    currentUser.value.isBanned = false;
+    return;
+  }
+
+  // Récupérer l'utilisateur original pour comparer les changements
+  const originalUser = users.value.find(u => u.id === currentUser.value.id);
+  const banStatusChanged = originalUser && originalUser.isBanned !== currentUser.value.isBanned;
 
   try {
     // On prépare le payload avec uniquement les données modifiables
     const payload = {
-      roles: currentUser.value.roles
+      roles: currentUser.value.roles,
+      isBanned: currentUser.value.isBanned
     };
     await apiClient.put(`/api/users/${currentUser.value.id}`, payload);
+
+    // Logger le changement de statut de bannissement si il y en a eu un
+    if (banStatusChanged) {
+      const action = currentUser.value.isBanned ? 'bannissement' : 'débannissement';
+      await activityLogger.log('INFO', `${action.charAt(0).toUpperCase() + action.slice(1)} d'utilisateur effectué via modale`, {
+        targetUserId: currentUser.value.id,
+        targetUsername: currentUser.value.username,
+        targetEmail: currentUser.value.email,
+        action: action,
+        newStatus: currentUser.value.isBanned ? 'banni' : 'actif',
+        method: 'modal_edit',
+        rolesChanged: JSON.stringify(currentUser.value.roles) !== JSON.stringify(originalUser.roles),
+        newRoles: currentUser.value.roles
+      });
+    }
 
     // On rafraîchit la liste après la mise à jour
     await fetchUsers();
@@ -70,19 +147,8 @@ function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('fr-FR', options);
 }
 
-async function toggleVerifiedStatus(user) {
-  try {
-    const payload = { isVerified: !user.isVerified };
-    await apiClient.patch(`/api/users/${user.id}`, payload, {
-      headers: {
-        'Content-Type': 'application/merge-patch+json'
-      }
-    });
-    user.isVerified = !user.isVerified;
-  } catch (err) {
-    console.error("Erreur lors du changement de statut de vérification:", err);
-    alert("La modification a échoué.");
-  }
+function isUserAdmin(user) {
+  return user.roles && (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_SUPER_ADMIN'));
 }
 </script>
 
@@ -101,6 +167,7 @@ async function toggleVerifiedStatus(user) {
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Rôles</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Inscrit le</th>
           <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Vérifié</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Banni</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Statut</th>
           <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Actions</th>
         </tr>
@@ -128,13 +195,37 @@ async function toggleVerifiedStatus(user) {
               <div class="w-11 h-6 bg-gray-200 dark:bg-gray-600 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 dark:after:border-gray-600 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600 dark:peer-checked:bg-green-500"></div>
             </label>
           </td>
+          <td class="px-6 py-4 whitespace-nowrap text-center">
+            <label :for="'banned-' + user.id"
+                   :class="['relative inline-flex items-center', isUserAdmin(user) ? 'cursor-not-allowed opacity-50' : '']">
+              <input type="checkbox"
+                     :id="'banned-' + user.id"
+                     class="sr-only peer"
+                     :checked="user.isBanned"
+                     :disabled="isUserAdmin(user)"
+                     @change="toggleBannedStatus(user)">
+              <div :class="['w-11 h-6 rounded-full peer peer-focus:ring-4 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[\'\'] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all',
+                           isUserAdmin(user) ? 'bg-gray-300 dark:bg-gray-500 after:border-gray-400 dark:after:border-gray-500' : 'bg-gray-200 dark:bg-gray-600 after:border-gray-300 dark:after:border-gray-600 peer-focus:ring-red-300 dark:peer-focus:ring-red-800 peer-checked:bg-red-600 dark:peer-checked:bg-red-500']"></div>
+            </label>
+            <div v-if="isUserAdmin(user)" class="text-xs text-gray-400 dark:text-gray-500 mt-1">
+              Admin protégé
+            </div>
+          </td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                  :class="user.isVerified ?
-                  'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
-                  'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'">
-              {{ user.isVerified ? 'Vérifié' : 'Non vérifié' }}
-            </span>
+            <div class="space-y-1">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    :class="user.isVerified ?
+                    'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                    'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'">
+                {{ user.isVerified ? 'Vérifié' : 'Non vérifié' }}
+              </span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    :class="user.isBanned ?
+                    'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' :
+                    'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'">
+                {{ user.isBanned ? 'Banni' : 'Actif' }}
+              </span>
+            </div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
             <button @click="openEditModal(user)" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Modifier</button>
@@ -155,6 +246,19 @@ async function toggleVerifiedStatus(user) {
               <input :id="role" type="checkbox" :value="role" v-model="currentUser.roles" class="h-4 w-4 text-indigo-600 border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 focus:ring-indigo-500 dark:focus:ring-indigo-600">
               <label :for="role" class="ml-3 block text-sm text-gray-900 dark:text-gray-300">{{ role }}</label>
             </div>
+          </div>
+          <div class="mt-4">
+            <label for="banned" :class="['inline-flex items-center', isUserAdmin(currentUser) ? 'opacity-50 cursor-not-allowed' : '']">
+              <input id="banned"
+                     type="checkbox"
+                     v-model="currentUser.isBanned"
+                     :disabled="isUserAdmin(currentUser)"
+                     class="h-4 w-4 text-indigo-600 border-gray-300 rounded dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 focus:ring-indigo-500 dark:focus:ring-indigo-600">
+              <span class="ml-2 text-sm text-gray-900 dark:text-gray-300">
+                Banni
+                <span v-if="isUserAdmin(currentUser)" class="text-xs text-gray-400 dark:text-gray-500 ml-1">(Admin protégé)</span>
+              </span>
+            </label>
           </div>
           <div class="mt-8 flex justify-end gap-4">
             <button @click="isModalOpen = false" type="button" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600">Annuler</button>

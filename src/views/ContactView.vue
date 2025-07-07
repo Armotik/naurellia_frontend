@@ -31,7 +31,7 @@ async function handleSubmit() {
   } catch (error) {
     if (error.response) {
       if (error.response.status === 429) {
-        errorMessage.value = "Vous avez déjà envoyé un message récemment. Veuillez réessayer dans une heure.";
+        errorMessage.value = "Vous avez déjà envoyé 3 messages récemment. Veuillez réessayer dans une heure.";
       } else if (error.response.status === 400) {
         errorMessage.value = "Le sujet et le message doivent contenir au moins 5 caractères.. Veuillez vérifier vos informations.";
       } else {

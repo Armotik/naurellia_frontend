@@ -60,7 +60,7 @@ onUnmounted(() => document.removeEventListener('click', handleClickOutside));
   </div>
 
   <!-- La vraie navbar avec opacité conditionnelle -->
-  <nav class="bg-white dark:bg-gray-900 backdrop-blur-md shadow-sm dark:shadow-gray-800/20 sticky top-0 z-40 transition-opacity duration-300"
+  <nav class="bg-white dark:bg-gray-900 backdrop-blur-md shadow-sm dark:shadow-gray-800/20 sticky top-0 z-9999 transition-opacity duration-300"
        :class="{ 'opacity-0': !contentReady, 'opacity-100': contentReady }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">

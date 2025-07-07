@@ -25,7 +25,14 @@ const defaultData = {
   '@type': 'WebSite',
   name: 'Naurellia',
   url: 'https://www.naurellia.com',
-  logo: 'https://www.naurellia.com/logo.webp',
+  logo: {
+    '@type': 'ImageObject',
+    '@id': 'https://www.naurellia.com/#logo',
+    url: 'https://www.naurellia.com/logo.webp',
+    width: '512',
+    height: '512',
+    caption: 'Logo Naurellia'
+  },
   description: 'Découvrez l\'Île de Ré de manière responsable. Informations, conseils et ressources pour un tourisme durable et respectueux.',
   potentialAction: {
     '@type': 'SearchAction',
@@ -40,9 +47,17 @@ const defaultData = {
 const organizationData = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
+  '@id': 'https://www.naurellia.com/#organization',
   name: 'Naurellia',
   url: 'https://www.naurellia.com',
-  logo: 'https://www.naurellia.com/logo.webp'
+  logo: {
+    '@type': 'ImageObject',
+    '@id': 'https://www.naurellia.com/#logo',
+    url: 'https://www.naurellia.com/logo.webp',
+    width: '512',
+    height: '512',
+    caption: 'Logo Naurellia'
+  }
 }
 
 watch(() => props.data, updateJsonLd, { immediate: true })

@@ -42,6 +42,11 @@ MA DEMANDE :
 
 Génère une description HTML en suivant exactement la structure et les contraintes ci-dessus pour le Point d'Intérêt suivant :
 
-- Nom du POI : Déchéterie d'Ars-en-Ré
-- Type de POI : Danger
-- Informations connues :
+- Nom du POI : Arret de bus "Sablanceaux" - Ligne 150, 151, 152
+- Type de POI : Arret de bus
+- Informations connues : Ligne 150, 151, 152 du réseau de bus régional Nouvelle-Aquitaine, reliant La Rochelle à l'Île de Ré.
+
+La ligne 150 est la ligne annuelle, tandis que les lignes 151 et 152 sont des lignes saisonnières d'été.
+
+https://transports.nouvelle-aquitaine.fr/sites/default/files/timetable_files/NOUVEAU-SPECIAL%20Et%C3%A9-Fiche%20horaire%20Cars%20r%C3%A9gionaux-Les%20Portes-en-r%C3%A9-La%20Rochelle.pdf
+

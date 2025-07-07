@@ -114,6 +114,12 @@ function formatDate(dateString) {
 
   return date.toLocaleDateString('fr-FR', options);
 }
+
+// Fonction pour afficher l'utilisateur
+function displayUser(log) {
+  // Utiliser user_email qui est disponible directement dans l'objet log
+  return log.user_email || 'Anonyme';
+}
 </script>
 
 <template>
@@ -159,7 +165,7 @@ function formatDate(dateString) {
         <tr v-for="log in logs" :key="log.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ formatDate(log.created_at) }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold" :class="getLogLevelClass(log.level)">{{ log.level }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ log.user?.email || 'Anonyme' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ displayUser(log) }}</td>
           <td class="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{{ log.message }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ log.context.request?.ip || 'N/A' }}</td>
         </tr>

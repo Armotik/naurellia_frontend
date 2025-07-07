@@ -42,6 +42,16 @@ export const useAuthStore = defineStore('auth', {
         return { success: true }
       } catch (error) {
         // On logue également les tentatives de connexion échouées.
+
+        if (error.response && error.response.status === 401) {
+          await activityLogger.log('WARNING', 'Failed login attempt due to unauthorized access', {
+            attemptedEmail: credentials.username,
+            error: error.response.data.message || 'Unauthorized',
+          });
+
+          return { success: false, message: error.response.data.message || 'Compte non autorisé.' }
+        }
+
         await activityLogger.log('WARNING', 'Failed login attempt', { attemptedEmail: credentials.username });
 
         console.error('Erreur de connexion :', error)
