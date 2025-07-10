@@ -105,6 +105,14 @@ async function handleRegister() {
         </div>
 
         <div>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            En vous inscrivant, vous acceptez nos
+            <RouterLink to="/terms" class="font-medium text-green-700 hover:underline dark:text-green-500 dark:hover:text-green-400">Conditions d'utilisation</RouterLink> et notre
+            <RouterLink to="/privacy" class="font-medium text-green-700 hover:underline dark:text-green-500 dark:hover:text-green-400">Politique de confidentialité</RouterLink>.
+          </p>
+        </div>
+
+        <div>
           <button
             type="submit"
             :disabled="isLoading"

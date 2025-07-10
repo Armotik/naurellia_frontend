@@ -27,6 +27,8 @@ const AdminHomeView = () => import('@/views/admin/AdminHomeView.vue')
 const LogsView = () => import('@/views/admin/LogsView.vue')
 const SessionTrackerView = () => import('@/views/admin/SessionTrackerView.vue')
 const UserManagementView = () => import('@/views/admin/UserManagementView.vue')
+const IPHistoryView = () => import('@/views/admin/IPHistoryView.vue')
+const EcoDesignPolicyView = () => import('@/views/EcoDesignPolicyView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +43,21 @@ const router = createRouter({
           {
             name: 'description',
             content: 'Naurellia - Découvrez l\'Île de Ré de manière responsable. Informations, conseils et ressources pour un tourisme durable et respectueux.'
+          }
+        ]
+      }
+    },
+    {
+      path: '/politique-ecoconception',
+      name: 'eco-design-policy',
+      component: EcoDesignPolicyView,
+      meta: {
+        title: "Politique d'éco-conception - Naurellia",
+        metaTags: [
+          {
+            name: 'description',
+            content:
+              "Découvrez notre politique d'éco-conception et nos engagements pour un numérique plus responsable, conformément au RGESN."
           }
         ]
       }
@@ -300,6 +317,15 @@ const router = createRouter({
           meta: {
             title: 'Gestion des utilisateurs',
             description: 'Gérez les comptes utilisateurs, modifiez leurs rôles et gérez les permissions.'
+          }
+        },
+        {
+          path: 'historique-ip',
+          name: 'ip-history',
+          component: IPHistoryView,
+          meta: {
+            title: 'Historique des IP',
+            description: 'Consultez l\'historique des adresses IP pour surveiller les activités suspectes.'
           }
         }
       ]

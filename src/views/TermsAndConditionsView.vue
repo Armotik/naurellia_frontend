@@ -13,279 +13,394 @@ onMounted(() => {
       <div class="text-center mb-16">
         <h2 class="text-base font-semibold text-green-700 dark:text-green-500 tracking-wide uppercase">Cadre d'Utilisation</h2>
         <p class="mt-1 text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
-          Conditions Générales
+          Conditions Générales d'Utilisation
         </p>
         <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500 dark:text-gray-400">
-          Dernière mise à jour : 22 juin 2025
+          Dernière mise à jour : 8 juillet 2025
         </p>
       </div>
 
-      <div class="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-lg shadow-md text-base leading-7 text-gray-700">
+      <div class="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-lg shadow-md text-base leading-7 text-gray-700 dark:text-gray-300">
         <!-- Sommaire -->
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white dark:border-gray-700 border-b border-gray-200 pb-3 mb-6">Sommaire</h2>
         <nav class="mb-12">
           <ul class="space-y-2">
-            <li><a href="#I" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">1. Introduction</a></li>
+            <li><a href="#I" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">1. Définitions et objet</a></li>
             <li><a href="#II" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">2. Acceptation des CGU</a></li>
-            <li><a href="#III" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">3. Présentation du site</a></li>
-            <li><a href="#IV" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">4. Description des Services</a></li>
-            <li><a href="#V" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">5. Limitations contractuelles sur les données techniques</a></li>
-            <li><a href="#VI" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">6. Propriété intellectuelle et contrefaçons</a></li>
-            <li><a href="#VII" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">7. Limitations de responsabilité</a></li>
-            <li><a href="#VIII" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">8. Gestion des données personnelles</a></li>
-            <li><a href="#IX" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">9. Liens hypertextes et cookies</a></li>
-            <li><a href="#X" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">10. Droit applicable et attribution de juridiction</a></li>
-            <li><a href="#XI" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">11. Lexique</a></li>
+            <li><a href="#III" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">3. Description des services Naurellia</a></li>
+            <li><a href="#IV" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">4. Conditions d'accès et inscription</a></li>
+            <li><a href="#V" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">5. Utilisation de la carte interactive</a></li>
+            <li><a href="#VI" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">6. Commentaires et contributions</a></li>
+            <li><a href="#VII" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">7. Obligations et interdictions</a></li>
+            <li><a href="#VIII" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">8. Propriété intellectuelle</a></li>
+            <li><a href="#IX" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">9. Protection des données personnelles</a></li>
+            <li><a href="#X" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">10. Responsabilité et garanties</a></li>
+            <li><a href="#XI" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">11. Suspension et résiliation</a></li>
+            <li><a href="#XII" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">12. Droit applicable et juridiction</a></li>
           </ul>
         </nav>
 
-        <!-- Introduction -->
+        <!-- Définitions et objet -->
         <section id="I" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">1. Introduction</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Les présentes conditions générales d'utilisation (ci-après les "CGU") ont pour
-            objet de définir les modalités et conditions d'utilisation du site web <a
-            href="https://naurellia.com" class="text-green-700 hover:text-green-800 underline">naurellia.com</a>
-            (ci-après le "Site") et
-            des services proposés par Naurellia (ci-après les "Services").
-          </p>
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">1. Définitions et objet</h2>
+          <div class="space-y-4">
+            <p><strong class="font-semibold text-gray-900 dark:text-white">Définitions :</strong></p>
+            <ul class="list-disc pl-6 space-y-2">
+              <li><strong class="font-semibold text-gray-900 dark:text-white">Site :</strong> Le site web Naurellia accessible à l'adresse https://naurellia.com</li>
+              <li><strong class="font-semibold text-gray-900 dark:text-white">Services :</strong> L'ensemble des fonctionnalités proposées par Naurellia (carte interactive, blog, POI, commentaires, compte utilisateur)</li>
+              <li><strong class="font-semibold text-gray-900 dark:text-white">Utilisateur :</strong> Toute personne physique ou morale utilisant le Site</li>
+              <li><strong class="font-semibold text-gray-900 dark:text-white">Compte :</strong> Espace personnel créé par l'Utilisateur après inscription</li>
+              <li><strong class="font-semibold text-gray-900 dark:text-white">POI :</strong> Points d'Intérêt géographiques référencés sur la carte interactive</li>
+              <li><strong class="font-semibold text-gray-900 dark:text-white">Contenu Utilisateur :</strong> Tout contenu créé par l'Utilisateur (commentaires, messages de contact)</li>
+            </ul>
+            <p class="mt-4">
+              Les présentes conditions générales d'utilisation ont pour objet de définir les modalités et conditions d'utilisation du Site et des Services proposés par Naurellia, plateforme dédiée au tourisme durable sur l'Île de Ré.
+            </p>
+          </div>
         </section>
 
         <!-- Acceptation des CGU -->
         <section id="II" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">2. Acceptation des CGU</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            L'accès et l'utilisation du Site et des Services impliquent l'acceptation pleine et entière des CGU par
-            l'Utilisateur. En cas de non-respect des CGU, Naurellia se réserve le droit de suspendre ou de
-            résilier l'accès aux Services.
-          </p>
-        </section>
-
-        <!-- Présentation du site -->
-        <section id="III" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">3. Présentation du site</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Le Site a pour objet de présenter les activités de Naurellia et de proposer des articles, des
-            actualités, des événements et des services à destination des Utilisateurs. Il permet également
-            de consulter des informations pratiques, de contacter Naurellia et de poster des commentaires
-          </p>
-          <p class="mb-6 text-gray-600 dark:text-gray-300">
-            En accord avec l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie
-            numérique, les informations concernant l'identité de l'éditeur du Site et de l'hébergeur sont
-            indiquées ci-dessous :
-          </p>
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-              <h3 class="font-semibold text-lg mb-2 dark:text-white">Propriétaire</h3>
-              <p class="text-gray-600 dark:text-gray-300">
-                <strong>Anthony MUDET</strong><br>
-                3 chemin des Genêts<br>
-                17740 Sainte-Marie-De-Ré, France
-              </p>
-            </div>
-            <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-              <h3 class="font-semibold text-lg mb-2 dark:text-white">Hébergeur</h3>
-              <p class="text-gray-600 dark:text-gray-300">
-                <strong>
-                  <a href="https://www.hostinger.com/" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">
-                    Hostinger International Ltd.
-                  </a>
-                </strong><br>
-                61 Lordou Vironos str.<br>
-                6023 Larnaca, Chypre
-              </p>
-            </div>
-            <div class="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-              <h3 class="font-semibold text-lg mb-2 dark:text-white">Webmaster</h3>
-              <p class="text-gray-600 dark:text-gray-300">
-                <strong>Anthony MUDET</strong><br>
-                <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a>
-              </p>
-            </div>
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">2. Acceptation des CGU</h2>
+          <div class="space-y-4">
+            <p>
+              L'accès et l'utilisation du Site impliquent l'acceptation pleine et entière des présentes CGU par l'Utilisateur. Cette acceptation vaut conclusion d'un contrat entre l'Utilisateur et Naurellia.
+            </p>
+            <p>
+              Pour les services nécessitant une inscription (commentaires, compte utilisateur), l'acceptation est matérialisée par la validation du formulaire d'inscription et la case à cocher "J'accepte les conditions générales d'utilisation".
+            </p>
+            <p>
+              Si l'Utilisateur n'accepte pas les présentes CGU, il doit s'abstenir d'utiliser le Site et ses Services.
+            </p>
           </div>
         </section>
 
-        <!-- Description des Services -->
-        <section id="IV" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">4. Description des Services</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Le Site a pour objet de fournir des informations sur les activités de Naurellia. A ce titre,
-            Naurellia s'efforce de fournir des informations aussi précises que possible sur le Site. Toutefois, Naurellia
-            ne pourra être tenu responsable des omissions, des inexactitudes et des carences dans la mise à jour,
-            qu'elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Tous les informations indiquées sur le Site sont données à titre indicatif, et sont susceptibles
-            d'évoluer. Par ailleurs, les renseignements figurant sur le Site ne sont pas exhaustifs. Ils sont
-            donnés sous réserve de modifications ayant été apportées depuis leur mise en ligne.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Les Services proposés par Naurellia comprennent notamment :
-          </p>
-          <ul class="list-disc pl-6 space-y-2 mb-4 text-gray-600 dark:text-gray-300">
-            <li>La publication d'articles et d'actualités sur le Site ;</li>
-            <li>L'organisation d'événements et de concours ;</li>
-            <li>La mise en relation des Utilisateurs ;</li>
-            <li>La consultation d'informations pratiques ;</li>
-            <li>La possibilité de contacter Naurellia.</li>
-          </ul>
+        <!-- Description des services -->
+        <section id="III" class="mb-12">
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">3. Description des services Naurellia</h2>
+          <div class="space-y-4">
+            <p>
+              Naurellia propose les services suivants, accessibles gratuitement :
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">3.1 Carte interactive</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Visualisation interactive des POI de l'Île de Ré</li>
+              <li>Fonctionnalités de navigation et zoom</li>
+              <li>Recherche géographique et filtrage par catégories</li>
+              <li>Géolocalisation utilisateur (avec consentement)</li>
+              <li>Informations détaillées sur chaque POI</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">3.2 Contenu éditorial</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Articles de blog sur le tourisme durable</li>
+              <li>Conseils pratiques et informations locales</li>
+              <li>Actualités liées à l'Île de Ré</li>
+              <li>Base de données de POI avec descriptions détaillées</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">3.3 Services utilisateur</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Création de compte sécurisé</li>
+              <li>Système de commentaires modérés</li>
+              <li>Formulaires de contact et partenariat</li>
+              <li>Préférences personnalisables (thème, langue)</li>
+            </ul>
+
+            <p class="mt-4">
+              <strong class="font-semibold text-gray-900 dark:text-white">Nature du service :</strong> Naurellia est un service d'information touristique à caractère non commercial. Les informations sont fournies à titre indicatif et peuvent évoluer sans préavis.
+            </p>
+          </div>
         </section>
 
-        <!-- Limitations contractuelles -->
+        <!-- Conditions d'accès et inscription -->
+        <section id="IV" class="mb-12">
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">4. Conditions d'accès et inscription</h2>
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">4.1 Accès libre</h3>
+            <p>
+              La consultation du Site et de la carte interactive est libre et ne nécessite pas d'inscription.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">4.2 Inscription obligatoire</h3>
+            <p>
+              L'inscription est obligatoire pour :
+            </p>
+            <ul class="list-disc pl-6 space-y-2 mb-4">
+              <li>Publier des commentaires</li>
+              <li>Accéder à des fonctionnalités personnalisées</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">4.3 Conditions d'inscription</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Être âgé de 13 ans minimum (avec accord parental pour les mineurs)</li>
+              <li>Fournir des informations exactes et à jour</li>
+              <li>Disposer d'une adresse email valide</li>
+              <li>Choisir un mot de passe sécurisé</li>
+              <li>Accepter la vérification par email</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">4.4 Responsabilité du compte</h3>
+            <p>
+              L'Utilisateur est seul responsable de la confidentialité de ses identifiants et de toutes les activités effectuées sous son compte. En cas d'utilisation non autorisée, il doit immédiatement contacter Naurellia.
+            </p>
+          </div>
+        </section>
+
+        <!-- Utilisation de la carte interactive -->
         <section id="V" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">5. Limitations contractuelles sur les données techniques</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Le Site utilise la technologie Vue.js, un framework JavaScript open-source, pour son bon
-            fonctionnement. Le Site ne pourra être tenu responsable de dommages matériels liés à l'utilisation du Site. De plus,
-            l'Utilisateur du Site s'engage à accéder au Site en utilisant un matériel récent, ne contenant pas de virus et
-            avec un navigateur de dernière génération mis-à-jour.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Le Site est hébergé chez Hostinger International Ltd., dont le siège social est situé au 61
-            Lordou Vironos str., 6023 Larnaca, Chypre, qui est un prestataire de services sur le territoire de
-            l'Union Européenne et conformément aux dispositions du Règlement Général sur la Protection des Données
-            (RGPD : n° 2016-679). L'objectif est de fournir un service qui assure le meilleur taux d'accessibilité.
-            L'hébergeur assure la continuité de son service 24 heures sur 24, tous les jours de l'année.
-            Toutefois, il se réserve la possibilité d'interrompre le service d'hébergement pour des durées
-            les plus courtes possibles, notamment à des fins de maintenance, pour améliorer son infrastructure,
-            en cas de panne ou si les services génèrent un trafic jugé anormal.
-          </p>
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">5. Utilisation de la carte interactive</h2>
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">5.1 Fonctionnalités autorisées</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Consultation des POI et de leurs informations</li>
+              <li>Navigation et recherche géographique</li>
+              <li>Utilisation de la géolocalisation (avec consentement)</li>
+              <li>Partage de liens vers des POI spécifiques</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">5.2 Limitations techniques</h3>
+            <p>
+              La précision de la géolocalisation et des données cartographiques dépend des services tiers utilisés (OpenStreetMap, Geoapify). Naurellia recommande de vérifier les informations avant tout déplacement et d'utiliser des outils de navigation officiels.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">5.3 Utilisation interdite</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Extraction automatisée ou massive des données</li>
+              <li>Utilisation commerciale sans autorisation</li>
+              <li>Tentative de contournement des mesures de sécurité</li>
+              <li>Surcharge intentionnelle des serveurs</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Commentaires et contributions -->
+        <section id="VI" class="mb-12">
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">6. Commentaires et contributions</h2>
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">6.1 Règles de publication</h3>
+            <p>Les commentaires doivent respecter les principes suivants :</p>
+            <ul class="list-disc pl-6 space-y-2 mb-4">
+              <li>Être en rapport avec le sujet traité</li>
+              <li>Respecter la courtoisie et la bienveillance</li>
+              <li>Promouvoir les valeurs du tourisme responsable</li>
+              <li>Ne pas contenir de contenu commercial non autorisé</li>
+              <li>Respecter les droits de propriété intellectuelle</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">6.2 Contenu interdit</h3>
+            <p>Sont strictement interdits les contenus :</p>
+            <ul class="list-disc pl-6 space-y-2 mb-4">
+              <li>Diffamatoires, injurieux, haineux ou discriminatoires</li>
+              <li>À caractère pornographique ou violent</li>
+              <li>Portant atteinte à la vie privée ou à l'image de tiers</li>
+              <li>Faisant l'apologie de comportements illégaux</li>
+              <li>Contenant des virus ou codes malveillants</li>
+              <li>Constituant du spam ou de la publicité non autorisée</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">6.3 Modération</h3>
+            <p>
+              Tous les commentaires sont soumis à modération avant publication. Naurellia se réserve le droit de refuser, modifier ou supprimer tout contenu ne respectant pas les présentes règles, sans préavis ni justification.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">6.4 Licence d'utilisation</h3>
+            <p>
+              En publiant un commentaire, l'Utilisateur accorde à Naurellia une licence gratuite, non exclusive et permanente d'utilisation, reproduction et diffusion du contenu dans le cadre du fonctionnement du Site.
+            </p>
+          </div>
+        </section>
+
+        <!-- Obligations et interdictions -->
+        <section id="VII" class="mb-12">
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">7. Obligations et interdictions</h2>
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">7.1 Obligations de l'Utilisateur</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Utiliser le Site conformément à sa destination</li>
+              <li>Respecter les droits de propriété intellectuelle</li>
+              <li>Ne pas porter atteinte au fonctionnement du Site</li>
+              <li>Signaler tout contenu inapproprié ou dysfonctionnement</li>
+              <li>Maintenir la confidentialité de ses identifiants</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">7.2 Comportements interdits</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Tentatives d'intrusion ou de piratage</li>
+              <li>Utilisation de robots, scripts ou outils automatisés</li>
+              <li>Création de faux comptes ou usurpation d'identité</li>
+              <li>Perturbation volontaire du service</li>
+              <li>Collecte non autorisée de données personnelles</li>
+              <li>Contournement des mesures de sécurité</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">7.3 Sanctions</h3>
+            <p>
+              En cas de non-respect des présentes CGU, Naurellia peut, sans préavis :
+            </p>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Supprimer le contenu litigieux</li>
+              <li>Suspendre temporairement ou définitivement le compte</li>
+              <li>Bloquer l'accès au Site</li>
+              <li>Engager des poursuites judiciaires si nécessaire</li>
+            </ul>
+          </div>
         </section>
 
         <!-- Propriété intellectuelle -->
-        <section id="VI" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">6. Propriété intellectuelle et contrefaçons</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Naurellia est propriétaire des droits de propriété intellectuelle et détient les droits d'usage sur
-            tous les éléments accessibles sur le Site, notamment les textes, images, graphismes, logos, vidéos,
-            icônes et sons. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie
-            des éléments du Site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation
-            écrite préalable de Naurellia.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Toute exploitation non autorisée du Site ou de l'un quelconque des éléments qu'il contient sera
-            considérée comme constitutive d'une contrefaçon et poursuivie conformément aux dispositions des articles
-            L.335-2 et suivants du Code de Propriété Intellectuelle.
-          </p>
-        </section>
-
-        <!-- Les sections suivantes conservent le même format... -->
-        <section id="VII" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">7. Limitations de responsabilité</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Naurellia ne pourra être tenu responsable des dommages directs et indirects causés au matériel de
-            l'Utilisateur, lors de l'accès au Site, et résultant soit de l'utilisation d'un matériel ne
-            répondant pas aux spécifications indiquées au point 5, soit de l'apparition d'un bug ou d'une incompatibilité.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Naurellia ne pourra également être tenu responsable des dommages indirects (tels que perte de marché
-            ou perte d'opportunité) consécutifs à l'utilisation du Site. Des espaces interactifs (possibilité de
-            poser des questions dans l'espace contact) sont à la disposition des Utilisateurs. Naurellia se réserve le
-            droit de supprimer, sans mise en demeure préalable, tout contenu déposé dans cet espace qui
-            contreviendrait à la législation applicable en France, en particulier aux dispositions relatives à
-            la protection des données. Le cas échéant, Naurellia se réserve également la possibilité de mettre en
-            cause la responsabilité civile et/ou pénale de l'Utilisateur, notamment en cas de message à caractère
-            raciste, injurieux, diffamant, ou pornographique, quel que soit le support utilisé (texte, photographie...).
-          </p>
-        </section>
-
         <section id="VIII" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">8. Gestion des données personnelles</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            En France, les données personnelles sont notamment protégées par la loi n° 78-87 du 6 janvier 1978,
-            la loi n° 2004-801 du 6 août 2004, l'article L. 226-13 du Code pénal et la Directive Européenne du 24
-            octobre 1995. A l'occasion de l'utilisation du Site, peuvent être recueillies : les actions de l'Utilisateur
-            sur le Site, la date et l'heure de l'accès au Site, l'adresse de protocole Internet (IP) de
-            l'Utilisateur ainsi que toute les informations publiques fournies par l'adresse IP de l'Utilisateur
-            (pays, ville, région, fournisseur internet, ...)
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            En tout état de cause Naurellia ne collecte des informations personnelles relatives à l'Utilisateur
-            que pour le besoin de certains services proposés par le Site. L'Utilisateur fournit ces informations en
-            toute connaissance de cause, notamment lorsqu'il procède par lui-même à leur saisie. Il est alors précisé
-            à l'Utilisateur du Site l'obligation ou non de fournir ces informations.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Conformément aux dispositions des articles 38 et suivants de la loi 78-17 du 6 janvier 1978 relative
-            à l'informatique, aux fichiers et aux libertés, tout Utilisateur dispose d'un droit d'accès, de
-            rectification et d'opposition aux données personnelles le concernant, en effectuant sa demande écrite et signée,
-            accompagnée d'une copie du titre d'identité avec signature du titulaire de la pièce, en précisant l'adresse à
-            laquelle la réponse doit être envoyée.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Aucune information personnelle de l'Utilisateur du Site n'est publiée à l'insu de l'Utilisateur,
-            échangée, transférée, cédée ou vendue sur un support quelconque à des tiers. Seule l'hypothèse du rachat de
-            Naurellia et de ses droits permettrait la transmission des dites informations à l'éventuel acquéreur qui
-            serait à son tour tenu de la même obligation de conservation et de modification des données vis-à-vis de
-            l'Utilisateur du Site.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Le Site n'est pas déclaré à la CNIL car il ne recueille pas d'informations personnelles. Les bases
-            de données sont protégées par les dispositions de la loi du 1er juillet 1998 transposant la directive 96/9 du
-            11 mars 1996 relative à la protection juridique des bases de données.
-          </p>
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">8. Propriété intellectuelle</h2>
+          <div class="space-y-4">
+            <p>
+              Le Site, son interface, ses fonctionnalités, sa base de données de POI, ses textes, images et éléments graphiques sont protégés par le droit de la propriété intellectuelle et appartiennent à Naurellia ou à ses partenaires.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">8.1 Éléments propriétaires</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Interface utilisateur et design du Site</li>
+              <li>Base de données des POI et leurs descriptions</li>
+              <li>Articles de blog et contenus éditoriaux</li>
+              <li>Logo et éléments graphiques Naurellia</li>
+              <li>Code source et architecture technique</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">8.2 Éléments tiers</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Données cartographiques OpenStreetMap (licence ODbL)</li>
+              <li>Services de géocodage Geoapify</li>
+              <li>Bibliothèques et frameworks open source</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">8.3 Utilisation autorisée</h3>
+            <p>
+              L'Utilisateur peut consulter et utiliser le Site dans le cadre d'un usage personnel et non commercial. Toute autre utilisation nécessite l'autorisation écrite préalable de Naurellia.
+            </p>
+          </div>
         </section>
 
+        <!-- Protection des données -->
         <section id="IX" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">9. Liens hypertextes et cookies</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Le Site contient un certain nombre de liens hypertextes vers d'autres sites. Cependant, Naurellia
-            n'a pas la possibilité de vérifier le contenu des sites ainsi visités, et n'assumera en conséquence aucune
-            responsabilité de ce fait. La navigation sur le Site est susceptible de provoquer l'installation de cookie(s) sur
-            l'ordinateur de l'Utilisateur. Un cookie est un fichier de petite taille, qui ne permet pas l'identification de
-            l'Utilisateur, mais qui enregistre des informations relatives à la navigation d'un ordinateur sur un site. Les
-            données ainsi obtenues visent à faciliter la navigation ultérieure sur le Site, et ont également vocation à
-            permettre diverses mesures de fréquentation.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Le refus d'installation d'un cookie peut entraîner l'impossibilité d'accéder à certains services.
-            L'Utilisateur peut toutefois configurer son ordinateur de la manière suivante, pour refuser l'installation des
-            cookies :
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Sous Internet Explorer : onglet outil (pictogramme en forme de rouage en haut à droite) / options
-            internet. Cliquez sur Confidentialité et choisissez Bloquer tous les cookies. Validez sur Ok.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Sous Firefox : en haut de la fenêtre du navigateur, cliquez sur le bouton Firefox, puis aller dans
-            l'onglet Options. Cliquer sur l'onglet Vie privée. Paramétrez les Règles de conservation sur : utiliser les
-            paramètres personnalisés pour l'historique. Enfin décochez-la pour désactiver les cookies.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Sous Safari : Cliquez en haut à droite du navigateur sur le pictogramme de menu (symbolisé par un
-            rouage). Sélectionnez Paramètres. Cliquez sur Afficher les paramètres avancés. Dans la section
-            "Confidentialité", cliquez sur Paramètres de contenu. Dans la section "Cookies", vous pouvez bloquer les cookies.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Sous Chrome : Cliquez en haut à droite du navigateur sur le pictogramme de menu (symbolisé par trois
-            lignes horizontales). Sélectionnez Paramètres. Cliquez sur Afficher les paramètres avancés. Dans la section
-            "Confidentialité", cliquez sur préférences. Dans l'onglet "Confidentialité", vous pouvez bloquer les
-            cookies.
-          </p>
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">9. Protection des données personnelles</h2>
+          <div class="space-y-4">
+            <p>
+              La collecte et le traitement des données personnelles sont effectués dans le respect du RGPD et de la loi Informatique et Libertés.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">9.1 Données collectées</h3>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Données d'inscription (email, nom d'utilisateur)</li>
+              <li>Données de navigation et d'utilisation</li>
+              <li>Données de géolocalisation (avec consentement)</li>
+              <li>Logs de sécurité et d'activité</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">9.2 Vos droits</h3>
+            <p>
+              Vous disposez des droits d'accès, rectification, suppression, opposition, limitation et portabilité sur vos données personnelles.
+            </p>
+
+            <p class="mt-4">
+              Pour plus d'informations et exercer vos droits, consultez notre <a href="/privacy-policy" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">Politique de confidentialité</a> ou contactez-nous à <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a>.
+            </p>
+          </div>
         </section>
 
+        <!-- Responsabilité et garanties -->
         <section id="X" class="mb-12">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">10. Droit applicable et attribution de juridiction</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Tout litige en relation avec l'utilisation du Site est soumis au droit français. Il est fait
-            attribution exclusive de juridiction aux tribunaux compétents de La Rochelle.
-          </p>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Les principales lois concernées sont : la loi n° 78-17 du 6 janvier 1978, notamment modifiée par la
-            loi n° 2004-801 du 6 août 2004 relative à l'informatique, aux fichiers et aux libertés. La loi n°
-            2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique.
-          </p>
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">10. Responsabilité et garanties</h2>
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">10.1 Limitation de responsabilité</h3>
+            <p>
+              Naurellia s'efforce de fournir des informations précises mais ne garantit pas :
+            </p>
+            <ul class="list-disc pl-6 space-y-2 mb-4">
+              <li>L'exactitude complète des informations sur les POI</li>
+              <li>La disponibilité permanente du Site</li>
+              <li>L'absence d'erreurs ou d'interruptions</li>
+              <li>La précision absolue de la géolocalisation</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">10.2 Exclusions de responsabilité</h3>
+            <p>
+              Naurellia ne peut être tenu responsable :
+            </p>
+            <ul class="list-disc pl-6 space-y-2 mb-4">
+              <li>Des dommages résultant d'une utilisation inappropriée du Site</li>
+              <li>Des erreurs de navigation dues à des informations inexactes</li>
+              <li>Des dysfonctionnements liés aux services tiers</li>
+              <li>Des contenus publiés par les utilisateurs</li>
+              <li>Des interruptions dues à la maintenance ou aux pannes</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">10.3 Recommandations</h3>
+            <p>
+              Il est recommandé aux utilisateurs de :
+            </p>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>Vérifier les informations pratiques avant déplacement</li>
+              <li>Utiliser des outils de navigation officiels</li>
+              <li>Sauvegarder leurs données importantes</li>
+              <li>Maintenir leurs logiciels à jour</li>
+            </ul>
+          </div>
         </section>
 
-        <section id="XI">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 pb-3 mb-6">11. Lexique</h2>
-          <p class="mb-4 text-gray-600 dark:text-gray-300">
-            Utilisateur : Internaute se connectant, utilisant le Site susnommé.<br>
-            Informations personnelles : « les informations qui permettent, sous quelque forme que ce soit,
-            directement ou non, l'identification des personnes physiques auxquelles elles s'appliquent » (article 4 de la
-            loi n° 78-17 du 6 janvier 1978).
-          </p>
+        <!-- Suspension et résiliation -->
+        <section id="XI" class="mb-12">
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">11. Suspension et résiliation</h2>
+          <div class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">11.1 Suspension par Naurellia</h3>
+            <p>
+              Naurellia peut suspendre l'accès au Site ou à un compte utilisateur en cas de :
+            </p>
+            <ul class="list-disc pl-6 space-y-2 mb-4">
+              <li>Violation des présentes CGU</li>
+              <li>Activité suspecte ou malveillante</li>
+              <li>Maintenance technique nécessaire</li>
+              <li>Injonction d'une autorité compétente</li>
+            </ul>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">11.2 Résiliation par l'Utilisateur</h3>
+            <p>
+              L'Utilisateur peut supprimer son compte à tout moment en contactant Naurellia. La suppression entraîne la perte définitive des données associées au compte.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">11.3 Effets de la résiliation</h3>
+            <p>
+              La résiliation entraîne :
+            </p>
+            <ul class="list-disc pl-6 space-y-2">
+              <li>La perte d'accès aux services nécessitant une inscription</li>
+              <li>La suppression des données personnelles (sauf obligations légales)</li>
+              <li>Le maintien des commentaires publiés (anonymisés)</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Droit applicable -->
+        <section id="XII">
+          <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6">12. Droit applicable et juridiction</h2>
+          <div class="space-y-4">
+            <p>
+              Les présentes CGU sont soumises au droit français. Tout litige relatif à leur interprétation ou exécution relève de la compétence exclusive des tribunaux du ressort de La Rochelle.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">12.1 Résolution amiable</h3>
+            <p>
+              En cas de litige, les parties s'efforceront de trouver une solution amiable. L'Utilisateur peut contacter Naurellia à <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a> pour exposer sa réclamation.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">12.2 Modifications des CGU</h3>
+            <p>
+              Naurellia se réserve le droit de modifier les présentes CGU à tout moment. Les modifications sont communiquées par publication sur le Site et, pour les utilisateurs inscrits, par notification email. L'utilisation continue du Site après modification vaut acceptation des nouvelles CGU.
+            </p>
+
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">12.3 Dispositions générales</h3>
+            <p>
+              Si une disposition des présentes CGU était déclarée nulle ou inapplicable, les autres dispositions demeureraient pleinement en vigueur. Les présentes CGU constituent l'intégralité de l'accord entre Naurellia et l'Utilisateur concernant l'utilisation du Site.
+            </p>
+          </div>
         </section>
       </div>
     </div>

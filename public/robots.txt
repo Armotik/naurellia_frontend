@@ -1,22 +1,77 @@
 User-agent: *
 Allow: /
 
+# Pages publiques importantes à indexer
+Allow: /blog
+Allow: /blog/articles/
+Allow: /contact
+Allow: /partenaires
+Allow: /devenir-partenaire
+Allow: /carte
+Allow: /mentions-legales
+Allow: /politique-de-confidentialite
+Allow: /conditions-generales
+Allow: /politique-ecoconception
+
 # Protection des zones administratives et techniques
 Disallow: /admin/
-Disallow: /login/
+Disallow: /login
+Disallow: /inscription
+Disallow: /mon-compte/
 Disallow: /verifier-email
-Disallow: /blog/edit/*
+Disallow: /mot-de-passe-oublie
+Disallow: /reinitialiser-mdp
 Disallow: /blog/create
+Disallow: /blog/edit/
 
-# Éviter l'indexation des paramètres d'URL
+# Pages de développement et temporaires
+Disallow: /bientot-disponible
+Disallow: /dons
+
+# Éviter l'indexation des paramètres d'URL et pages d'erreur
 Disallow: /*?*
+Disallow: /404
+Disallow: /*pathMatch*
 
-# Protection des requêtes API
-Disallow: /api/*
+# Protection des requêtes API et fichiers techniques
+Disallow: /api/
+Disallow: /*.json
+Disallow: /src/
+Disallow: /scripts/
 
-# Lien vers le sitemap (à ajuster selon votre domaine)
+# Fichiers et dossiers techniques à ne pas indexer
+Disallow: /node_modules/
+Disallow: /dist/
+Disallow: /.git/
+Disallow: /*.log
+Disallow: /vite.config.js
+Disallow: /eslint.config.js
+
+# Autoriser les ressources importantes pour le SEO
+Allow: /sitemap.xml
+Allow: /image-sitemap.xml
+Allow: /favicon.ico
+Allow: /robots.txt
+Allow: /*.webp
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /logo.webp
+
+# Lien vers les sitemaps
 Sitemap: https://www.naurellia.com/sitemap.xml
 Sitemap: https://www.naurellia.com/image-sitemap.xml
 
-# Taux de crawl recommandé
-Crawl-delay: 10
+# Taux de crawl recommandé pour un site de tourisme
+Crawl-delay: 5
+
+# Instructions spécifiques pour différents bots
+User-agent: Googlebot
+Crawl-delay: 2
+
+User-agent: Bingbot
+Crawl-delay: 5
+
+User-agent: facebookexternalhit
+Allow: /
+Allow: /blog/articles/

@@ -1,0 +1,37 @@
+Titre : Le service numérique a-t-il recours à un niveau de chiffrement adapté à ses besoins ?
+
+Objectif : Dans la plupart des situations, le recours à des mécanismes cryptographiques est absolument essentiel pour protéger les systèmes informatiques, ainsi que les données – notamment personnelles – collectées ou traitées. Ces mécanismes ont une empreinte environnementale à considérer. Par exemple, le chiffrement augmente automatiquement la consommation énergétique, d'abord par le calcul nécessaire à cette opération et au déchiffrement, mais aussi par le stockage et la charge pour les réseaux de communication. Néanmoins, ils peuvent dans certains cas permettre d'alléger les systèmes informatiques (par la compression des archives en parallèle du chiffrement, ou en évitant de conserver ou de faire circuler certains fichiers). Cette pratique vise donc à promouvoir la minimisation du coût environnemental du chiffrement, en tenant compte des contraintes de sécurité à respecter. Le chiffrement contribue par ailleurs à la protection et à la sécurité des données, et réduit le risque de faille et de fuite de données, dont les traitements ultérieurs ont une empreinte énergétique.
+
+Mise en œuvre :
+
+Chercher, pour un niveau de sécurité donné, les choix optimaux pour la préservation des ressources :
+
+    En réalisant des mesures comparatives de différents algorithmes de chiffrement, afin de sélectionner celui qui introduit la plus faible quantité de ressources processeurs pour une même performance ;
+    En évaluant la pertinence du chiffrement au regard de la nature des données et des risques associés ;
+    Dans le cas où le chiffrement est envisagé, mettre en œuvre, quand cela est possible, un algorithme et une implémentation qui minimisent l'empreinte environnementale du service (sans préjudice du niveau de sécurité requis).
+
+Avoir recourt à des mécanismes cryptographiques qui permettent de générer des preuves sans nécessité de conserver ou de divulguer le fichier à prouver (par exemple : preuve de fourniture de pièce d'identité, etc.).
+
+Conserver des archives chiffrées et compressées (des outils gratuits comme 7zip ou Zed! fonctionnent sur ce principe).
+
+Moyen de test ou de contrôle :
+
+Si le service repose sur des mécanismes de chiffrement, documenter dans la déclaration d'écoconception du service la pertinence du choix de mise en œuvre des mécanismes cryptographiques en fonction des risques de sécurité informatique du service et de la minimisation de l'empreinte environnementale associée.
+
+---
+
+Pour Naurellia :
+
+le site est un site MVC (Model View Controller) un site MVC fonctionne via une API (Application Programming Interface) qui permet de communiquer avec la base de données. Le site utilise le chiffrement pour protéger les données sensibles, comme les mots de passe des utilisateurs, en utilisant des algorithmes de hachage sécurisés. Les données sont stockées de manière sécurisée et ne sont pas accessibles sans autorisation appropriée.
+
+Le site est également protégé par un certificat SSL (Secure Sockets Layer) qui permet de chiffrer les données échangées entre le navigateur de l'utilisateur et le serveur. Cela garantit que les informations sensibles, telles que les identifiants de connexion et les données personnelles, sont transmises de manière sécurisée et ne peuvent pas être interceptées par des tiers malveillants.
+
+L'api est sécurisée par des clés d'API et des jetons d'authentification, qui garantissent que seules les applications autorisées peuvent accéder aux données du site. Cela permet de protéger les données contre les accès non autorisés et de garantir la sécurité des informations sensibles.
+
+Des règles d'accès au pare-feu sont mises en place pour limiter les connexions aux adresses IP autorisées et aux routes non autorisées, ce qui renforce la sécurité du site. De plus, des mesures de sécurité supplémentaires, telles que la surveillance des journaux d'accès et la détection des tentatives d'intrusion, sont mises en œuvre pour garantir la sécurité du site.
+
+// Le site utilise également des protocoles de sécurité tels que HTTPS pour garantir la confidentialité et l'intégrité des données échangées. Cela permet de protéger les informations sensibles contre les
+
+Afin de garantir qu'aucun acteur puisse se faire passer pour le site ou l'api, le site en plus des certifcat envoie dans ces entète une clé qui change régulièrement, et qui est vérifiée par l'api. Cela permet de s'assurer que les requêtes proviennent bien du site et non d'un tiers malveillant.
+
+Chaque action définie comme potentiellement malveillante est logguée dans un fichier de log, qui est ensuite analysé pour détecter les tentatives d'intrusion ou les comportements suspects. Cela permet de renforcer la sécurité du site et de réagir rapidement en cas de problème.

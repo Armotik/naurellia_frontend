@@ -85,6 +85,7 @@ onMounted(() => {
             <li><RouterLink to="/mentions-legales" class="text-base text-gray-500 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-500">Mentions Légales</RouterLink></li>
             <li><RouterLink to="/politique-de-confidentialite" class="text-base text-gray-500 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-500">Politique de Confidentialité</RouterLink></li>
             <li><RouterLink to="/conditions-generales" class="text-base text-gray-500 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-500">Conditions Générales</RouterLink></li>
+            <li><RouterLink to="/politique-ecoconception" class="text-base text-gray-500 dark:text-gray-300 hover:text-green-700 dark:hover:text-green-500">Politique d'éco-conception</RouterLink></li>
           </ul>
         </div>
 
@@ -119,6 +120,11 @@ onMounted(() => {
             </svg>
           </a>
         </div>
+      </div>
+
+      <!-- Section WebsiteCarbon Badge -->
+      <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6 flex justify-center">
+        <div id="wcb" class="carbonbadge dark:wcb-d"></div>
       </div>
     </div>
   </footer>

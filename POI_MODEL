@@ -17,6 +17,11 @@ Contraintes Techniques :
 - Le code HTML doit être simple (uniquement des balises <p>, <ul>, <li>, <strong>, <a>).
 - Ne pas inclure de titre, je le fournirai séparément.
 - La réponse doit être concise, il n'y a pas de limite de longueur, mais la description doit rester pertinente et utile.
+- Ne pas mettre d'adresse ou de numéro de téléphone si ces informations ne sont pas pertinentes ou disponibles.
+- La liste (<ul>) n'a pas besoin d'avoir un nombre fixe d'éléments, mais doit être complète et informative.
+- Ne pas inclure de liens externes ou d'images.
+- Si il n'y a pas d'informations pratiques pertinentes, ne pas inclure de liste à puces.
+- Pour les POI liés aux transports, ne pas inclure les infomations sur les horaires ou les tarifs.
 
 ---
 
@@ -26,7 +31,7 @@ Exemple de référence pour un Hôpital :
 <p>
   Principal établissement hospitalier public du secteur, assurant les urgences pour adultes et enfants ainsi qu'une large gamme de consultations spécialisées.
 </p>
-<ul>
+<ul> (nombre d'éléments à adapter selon les informations disponibles)
   <li><strong>Urgences :</strong> Ouvertes 24h/24, 7j/7. En cas d'urgence vitale, composez le <strong>15</strong> (SAMU) ou le <strong>112</strong>.</li>
   <li><strong>Adresse :</strong> Rue du Dr Albert Schweitzer, 17000 La Rochelle</li>
   <li><strong>Contact Standard :</strong> 05 46 45 50 50</li>
@@ -42,11 +47,10 @@ MA DEMANDE :
 
 Génère une description HTML en suivant exactement la structure et les contraintes ci-dessus pour le Point d'Intérêt suivant :
 
-- Nom du POI : Arret de bus "Sablanceaux" - Ligne 150, 151, 152
+- Nom du POI : Arret de bus "Salle Polyvalente" - Ligne 150/151
 - Type de POI : Arret de bus
-- Informations connues : Ligne 150, 151, 152 du réseau de bus régional Nouvelle-Aquitaine, reliant La Rochelle à l'Île de Ré.
+- Informations connues :
 
-La ligne 150 est la ligne annuelle, tandis que les lignes 151 et 152 sont des lignes saisonnières d'été.
+Ligne 150 (annuelle)
 
-https://transports.nouvelle-aquitaine.fr/sites/default/files/timetable_files/NOUVEAU-SPECIAL%20Et%C3%A9-Fiche%20horaire%20Cars%20r%C3%A9gionaux-Les%20Portes-en-r%C3%A9-La%20Rochelle.pdf
-
+PLUS D’INFORMATION : 0970 870 870 APPEL NON SURTAXÉ
