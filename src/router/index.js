@@ -20,6 +20,7 @@ const RegisterView = () => import('@/views/RegisterView.vue')
 const VerifyEmailNoticeView = () => import('@/views/VerifyEmailNoticeView.vue')
 const ChangePasswordView = () => import('@/views/ChangePasswordView.vue')
 const AccountView = () => import('@/views/account/AccountView.vue')
+const AccountDashboardView = () => import('@/views/account/AccountDashboardView.vue')
 const ForgotPasswordView = () => import('@/views/auth/ForgotPasswordView.vue')
 const ResetPasswordView = () => import('@/views/auth/ResetPasswordView.vue')
 const DashboardLayout = () => import('@/views/admin/DashboardLayout.vue')
@@ -28,10 +29,28 @@ const LogsView = () => import('@/views/admin/LogsView.vue')
 const SessionTrackerView = () => import('@/views/admin/SessionTrackerView.vue')
 const UserManagementView = () => import('@/views/admin/UserManagementView.vue')
 const IPHistoryView = () => import('@/views/admin/IPHistoryView.vue')
-const EcoDesignPolicyView = () => import('@/views/EcoDesignPolicyView.vue')
+const EcoDesignPolicyView = () => import('@/views/eco-design/EcoDesignOverviewView.vue')
+const EcoDesignStrategyView = () => import('@/views/eco-design/EcoDesignStrategyView.vue')
+const EcoDesignSpecificationsView = () => import('@/views/eco-design/EcoDesignSpecificationsView.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
+  // Configuration pour gérer le défilement automatique
+  scrollBehavior(to, from, savedPosition) {
+    // Si on a une position sauvegardée (navigation avec boutons précédent/suivant du navigateur)
+    if (savedPosition) {
+      return savedPosition;
+    }
+    // Si la route a un hash (ancre), on fait défiler vers cet élément
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth'
+      };
+    }
+    // Par défaut, on remonte en haut de la page
+    return { top: 0, behavior: 'smooth' };
+  },
   routes: [
     {
       path: '/',
@@ -59,6 +78,28 @@ const router = createRouter({
             content:
               "Découvrez notre politique d'éco-conception et nos engagements pour un numérique plus responsable, conformément au RGESN."
           }
+        ]
+      }
+    },
+    {
+      path: '/politique-ecoconception/strategie',
+      name: 'eco-design-strategy',
+      component: EcoDesignStrategyView,
+      meta: {
+        title: "Stratégie et Gouvernance - Politique d'écoconception - Naurellia",
+        metaTags: [
+          { name: 'description', content: "Détails sur la Stratégie et Gouvernance selon le RGESN." }
+        ]
+      }
+    },
+    {
+      path: '/politique-ecoconception/specifications',
+      name: 'eco-design-specifications',
+      component: EcoDesignSpecificationsView,
+      meta: {
+        title: "Spécifications Techniques - Politique d'écoconception - Naurellia",
+        metaTags: [
+          { name: 'description', content: "Détails sur les Spécifications Techniques selon le RGESN." }
         ]
       }
     },
@@ -238,7 +279,12 @@ const router = createRouter({
       children: [
         {
           path: '',
-          redirect: { name: 'change-password' }
+          name: 'account-dashboard',
+          component: AccountDashboardView,
+          meta: {
+            title: 'Tableau de bord',
+            description: 'Vue d\'ensemble de votre compte et accès rapide aux fonctionnalités.'
+          }
         },
         {
           path: 'changer-mdp',

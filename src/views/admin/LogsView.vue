@@ -30,6 +30,8 @@ let searchTimeout = null;
 // Fonction pour déterminer la classe CSS en fonction du niveau de log
 function getLogLevelClass(level) {
   switch (level) {
+    case 'DEBUG':
+      return 'text-gray-500 dark:text-gray-400';
     case 'INFO':
       return 'text-blue-600 dark:text-blue-400';
     case 'NOTICE':
@@ -131,6 +133,7 @@ function displayUser(log) {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <select v-model="filters.level" class="block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm dark:bg-gray-700 dark:text-white">
           <option value="">Tous les Niveaux</option>
+          <option value="DEBUG">DEBUG</option>
           <option value="INFO">INFO</option>
           <option value="NOTICE">NOTICE</option>
           <option value="WARNING">WARNING</option>

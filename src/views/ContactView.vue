@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import apiClient from '@/services/api';
-import { activityLogger } from '@/services/activityLogger';
+import { useLogger } from '@/composables/useLogger';
 
 const formData = ref({
   name: '',
@@ -14,6 +14,8 @@ const isLoading = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
 
+const { logFormAction, logApiError } = useLogger();
+
 async function handleSubmit() {
   isLoading.value = true;
   successMessage.value = '';
@@ -23,26 +25,110 @@ async function handleSubmit() {
     await apiClient.post('/api/contact', formData.value);
 
     successMessage.value = 'Merci ! Votre message a bien été envoyé. Nous vous répondrons dès que possible.';
-    await activityLogger.log('INFO', 'User submitted the contact form', { subject: formData.value.subject });
+
+    logFormAction('contact', 'submit_success', {
+      subject: formData.value.subject,
+      hasName: !!formData.value.name,
+      hasEmail: !!formData.value.email,
+      messageLength: formData.value.message.length
+    });
 
     // On vide le formulaire après succès
     formData.value = { name: '', email: '', subject: '', message: '' };
 
   } catch (error) {
+    let errorType;
+
     if (error.response) {
       if (error.response.status === 429) {
         errorMessage.value = "Vous avez déjà envoyé 3 messages récemment. Veuillez réessayer dans une heure.";
+        errorType = 'rate_limit';
       } else if (error.response.status === 400) {
         errorMessage.value = "Le sujet et le message doivent contenir au moins 5 caractères.. Veuillez vérifier vos informations.";
+        errorType = 'validation_error';
       } else {
         errorMessage.value = "Une erreur serveur est survenue. Veuillez réessayer plus tard.";
+        errorType = 'server_error';
       }
     } else {
       errorMessage.value = "Erreur réseau. Impossible de contacter le serveur.";
+      errorType = 'network_error';
     }
+
     console.error('Contact form error:', error);
+    logApiError('/api/contact', error.response?.status || 0, error.message, {
+      errorType: errorType,
+      subject: formData.value.subject
+    });
+
+    logFormAction('contact', 'submit_error', {
+      errorType: errorType,
+      subject: formData.value.subject
+    });
   } finally {
     isLoading.value = false;
+  }
+}
+
+// Tracking des interactions avec le formulaire
+function handleFieldFocus(fieldName) {
+  logFormAction('contact', 'field_focus', { fieldName });
+}
+
+function handleFieldValidation(fieldName, isValid, errorMessage = null) {
+  logFormAction('contact', 'field_validation', {
+    fieldName,
+    isValid,
+    errorMessage
+  });
+}
+
+// Validation en temps réel des champs
+function validateField(fieldName, value) {
+  let isValid = true;
+  let errorMessage = null;
+
+  switch (fieldName) {
+    case 'name':
+      isValid = value.trim().length >= 2;
+      errorMessage = isValid ? null : 'Le nom doit contenir au moins 2 caractères';
+      break;
+    case 'email': {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      isValid = emailRegex.test(value);
+      errorMessage = isValid ? null : 'Format d\'email invalide';
+      break;
+    }
+    case 'subject':
+      isValid = value.trim().length >= 5;
+      errorMessage = isValid ? null : 'Le sujet doit contenir au moins 5 caractères';
+      break;
+    case 'message':
+      isValid = value.trim().length >= 10;
+      errorMessage = isValid ? null : 'Le message doit contenir au moins 10 caractères';
+      break;
+  }
+
+  handleFieldValidation(fieldName, isValid, errorMessage);
+  return { isValid, errorMessage };
+}
+
+// Tracking du temps passé sur chaque champ
+const fieldFocusTime = ref({});
+
+function handleFieldFocusStart(fieldName) {
+  fieldFocusTime.value[fieldName] = Date.now();
+  handleFieldFocus(fieldName);
+}
+
+function handleFieldBlur(fieldName) {
+  if (fieldFocusTime.value[fieldName]) {
+    const timeSpent = Date.now() - fieldFocusTime.value[fieldName];
+    logFormAction('contact', 'field_time_spent', {
+      fieldName,
+      timeSpent
+    });
+    delete fieldFocusTime.value[fieldName];
   }
 }
 </script>
@@ -64,28 +150,66 @@ async function handleSubmit() {
           <div class="sm:col-span-2">
             <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nom complet</label>
             <div class="mt-1">
-              <input v-model="formData.name" type="text" name="name" id="name" required autocomplete="name" class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
+              <input
+                v-model="formData.name"
+                type="text"
+                name="name"
+                id="name"
+                required
+                autocomplete="name"
+                @focus="handleFieldFocusStart('name')"
+                @blur="handleFieldBlur('name')"
+                @input="validateField('name', formData.name)"
+                class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
             </div>
           </div>
 
           <div class="sm:col-span-2">
             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
             <div class="mt-1">
-              <input v-model="formData.email" id="email" name="email" type="email" required autocomplete="email" class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
+              <input
+                v-model="formData.email"
+                id="email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                @focus="handleFieldFocusStart('email')"
+                @blur="handleFieldBlur('email')"
+                @input="validateField('email', formData.email)"
+                class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
             </div>
           </div>
 
           <div class="sm:col-span-2">
             <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sujet</label>
             <div class="mt-1">
-              <input v-model="formData.subject" type="text" name="subject" id="subject" required class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
+              <input
+                v-model="formData.subject"
+                type="text"
+                name="subject"
+                id="subject"
+                required
+                @focus="handleFieldFocusStart('subject')"
+                @blur="handleFieldBlur('subject')"
+                @input="validateField('subject', formData.subject)"
+                class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
             </div>
           </div>
 
           <div class="sm:col-span-2">
             <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
             <div class="mt-1">
-              <textarea v-model="formData.message" id="message" name="message" rows="4" required class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md"></textarea>
+              <textarea
+                v-model="formData.message"
+                id="message"
+                name="message"
+                rows="4"
+                required
+                @focus="handleFieldFocusStart('message')"
+                @blur="handleFieldBlur('message')"
+                @input="validateField('message', formData.message)"
+                class="py-3 px-4 block w-full shadow-sm focus:ring-green-500 focus:border-green-500 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md"></textarea>
             </div>
           </div>
 

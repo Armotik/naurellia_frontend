@@ -2,11 +2,15 @@
 import { ref, onMounted } from 'vue';
 import apiClient from '@/services/api';
 import { RouterLink } from 'vue-router';
+import { useLogger } from '@/composables/useLogger';
 
 // State pour stocker les données et les états de chargement/erreur
 const partners = ref([]);
 const isLoading = ref(true);
 const error = ref(null);
+
+// Logger
+const { logApiError, logAction } = useLogger();
 
 // Fonction pour récupérer les partenaires depuis l'API
 async function fetchPartners() {
@@ -22,9 +26,18 @@ async function fetchPartners() {
   } catch (err) {
     error.value = "Impossible de charger la liste des partenaires pour le moment.";
     console.error("Erreur de chargement des partenaires:", err);
+    logApiError('/api/partners', err.response?.status || 0, err.message);
   } finally {
     isLoading.value = false;
   }
+}
+
+// Fonction pour logger le clic sur "Devenir partenaire"
+function handleBecomePartnerClick() {
+  logAction('partner', 'become_partner_click', {
+    source: 'partners_page',
+    timestamp: Date.now()
+  });
 }
 
 // On appelle la fonction au chargement du composant
@@ -101,7 +114,7 @@ onMounted(() => {
           <p class="mt-4 text-lg leading-6 text-green-200 dark:text-green-300">
             Vous partagez nos valeurs et souhaitez figurer sur cette page ? Contactez-nous pour devenir un partenaire officiel de Naurellia.
           </p>
-          <RouterLink to="/devenir-partenaire" class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 sm:w-auto">
+          <RouterLink to="/devenir-partenaire" class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-green-600 bg-white hover:bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700 sm:w-auto" @click="handleBecomePartnerClick">
             Devenir partenaire
           </RouterLink>
         </div>

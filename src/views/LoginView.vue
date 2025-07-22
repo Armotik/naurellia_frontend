@@ -25,9 +25,10 @@ async function handleLogin() {
 
   // CORRECTION : On ne redirige que si le login a réussi.
   if (result.success) {
-    await router.push('/');
+    await router.push('/mon-compte');
   } else {
     // Sinon, on affiche le message d'erreur spécifique renvoyé par le store.
+
     errorMessage.value = result.message;
   }
 }

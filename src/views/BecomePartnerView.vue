@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import apiClient from '@/services/api';
 import { activityLogger } from '@/services/activityLogger';
+import { useLogger } from '@/composables/useLogger';
 
 import heroImage from '@/assets/img/ile-de-re-pont.webp';
 
@@ -22,16 +23,34 @@ const isLoading = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
 
+// Logger
+const { logFormAction, logFormError, logApiError } = useLogger();
+
 async function handleSubmit() {
   isLoading.value = true;
   successMessage.value = '';
   errorMessage.value = '';
+
+  // Log tentative de soumission
+  logFormAction('become_partner', 'submit_attempt', {
+    companyName: formData.value.companyName,
+    businessType: formData.value.businessType,
+    hasWebsite: !!formData.value.website,
+    hasPhone: !!formData.value.phone,
+    messageLength: formData.value.message.length
+  });
 
   try {
     await apiClient.post('/api/partner-inquiry', formData.value);
 
     successMessage.value = 'Merci ! Votre demande a bien été envoyée. Nous reviendrons vers vous très prochainement.';
     await activityLogger.log('INFO', 'User submitted a partnership inquiry', { companyName: formData.value.companyName });
+
+    // Log succès de soumission
+    logFormAction('become_partner', 'submit_success', {
+      companyName: formData.value.companyName,
+      businessType: formData.value.businessType
+    });
 
   } catch (error) {
     let message = "Une erreur serveur est survenue. Veuillez réessayer plus tard.";
@@ -42,11 +61,29 @@ async function handleSubmit() {
         message = "Certains champs sont invalides. Veuillez vérifier vos informations.";
         if (error.response.data && error.response.data.violations) {
           message += '\n' + error.response.data.violations.join('\n');
+          // Log erreurs de validation spécifiques
+          error.response.data.violations.forEach(violation => {
+            logFormError('become_partner', 'validation_error', violation);
+          });
         }
       }
     }
     errorMessage.value = message;
     console.error('Partnership form error:', error);
+
+    // Log erreur générale
+    logApiError('/api/partner-inquiry', error.response?.status || 0, error.message, {
+      formData: {
+        companyName: formData.value.companyName,
+        businessType: formData.value.businessType
+      }
+    });
+
+    logFormAction('become_partner', 'submit_error', {
+      error: message,
+      statusCode: error.response?.status || 0
+    });
+
   } finally {
     isLoading.value = false;
   }
@@ -160,6 +197,13 @@ async function handleSubmit() {
               <div v-if="successMessage" class="p-4 bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-md">{{ successMessage }}</div>
               <div v-if="errorMessage" class="p-4 bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-md whitespace-pre-line">{{ errorMessage }}</div>
               <div>
+                <button type="submit" :disabled="isLoading" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-green-700 dark:hover:bg-green-800">
+                  <svg v-if="isLoading" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  {{ isLoading ? 'Envoi en cours...' : 'Envoyer ma demande' }}
+                </button>
               </div>
             </form>
           </div>

@@ -1,0 +1,97 @@
+Titre : Le service numérique a-t-il été conçu avec des technologies standard interopérables plutôt que des technologies spécifiques et fermées ?
+
+Objectif : L'objectif est de lutter contre l'obsolescence des équipements induite par le logiciel. Tout service numérique qui s'attachera à être le plus stable et pérenne dans le temps permettra l'allongement de la durée pendant laquelle les terminaux restent utilisables. Typiquement, le recours à de nouvelles interfaces de programmation (API) ou de nouveaux standards non supportés par les terminaux plus anciens sont susceptibles de favoriser une obsolescence rapide des terminaux. Ainsi, l'interopérabilité des standards est un vecteur pour allonger la durée d'utilisation et de vie de ces derniers. De même, les applications natives peuvent avoir besoin des dernières versions d'OS (système d'exploitation) ou même les dernières versions des équipements pour fonctionner, ce qui induit une obsolescence des matériels.
+
+Mise en œuvre :
+
+Evaluer, bien en amont du développement, la faisabilité de concevoir le service avec des technologies standard (par exemple, web plutôt que des applications natives) pour répondre au besoin des utilisateurs et des métiers. Il s'agit aussi de s'assurer que les API utilisées sont standard et bien supportées (API JavaScript dans les navigateurs web par exemple). S'appuyer sur des technologies interopérables permet de lutter contre l'obsolescence logicielle. De même, construire son service à partir de composants open source permet de garder la main sur la maintenance du code utilisé, par conséquent d'améliorer la durabilité du code et de réduire le risque d'obsolescence induite par le logiciel sur le matériel.
+
+Dans le cas où une application native est nécessaire (par exemple, si le service numérique nécessite des traitements de données particulièrement sensibles), s'assurer qu'elle utilise des standards compatibles avec les principaux systèmes d'exploitation.
+
+Moyen de test ou de contrôle :
+
+Vérifier que le service numérique est utilisable par une même interface sur l'ensemble des terminaux pertinents (par exemple : une Web App). Si le service numérique est une application native, évaluer la nécessité d'avoir choisi de développer une application native : contraintes techniques, matériel cible maîtrisé ?
+
+Le critère est validé si le service s'appuie sur des standards interopérables communs aux principaux écosystèmes (terminaux, systèmes d'exploitation, navigateurs...).
+
+---
+
+Pour Naurellia :
+
+FRONTEND
+
+**Framework et technologies principales :**
+- **Vue.js 3.5.13** - Framework web standard, open source
+- **Vue Router 4.5.0** - Routage côté client standard
+- **Pinia 3.0.1** - Gestion d'état standard pour Vue
+- **Vite 6.2.4** - Build tool moderne basé sur les standards ES modules
+
+**Technologies web standard :**
+- **JavaScript ES modules** - Standard web natif
+- **HTML/CSS** - Technologies web fondamentales
+- **TailwindCSS** - Framework CSS basé sur les standards CSS
+- **Axios** - Client HTTP standard pour les API REST
+
+**Bibliothèques interopérables :**
+- **Leaflet** pour les cartes - Standard open source
+- **CodeMirror** pour l'édition de code - Standard web
+
+### **Configuration Optimisée**
+- **Compression Gzip et Brotli** activée
+- **Tree-shaking** pour éliminer le code mort
+- **Code splitting** intelligent avec `manualChunks`
+- **Minification avec Terser**
+- **Lazy loading** des vues avec `import()` dynamique
+
+### **Interopérabilité Garantie**
+1. **Multi-navigateurs** : Technologies supportées par tous les navigateurs modernes
+2. **Multi-plateformes** : Application web accessible sur desktop, mobile, tablette
+3. **Standards ouverts** : Aucune dépendance à des technologies propriétaires
+4. **APIs standard** : Utilisation d'APIs web natives et REST
+
+---
+
+BACKEND
+
+#### **Framework Standard**
+- **Symfony 7.3** - Framework PHP open source, standard de l'industrie
+- **PHP 8.2+** - Langage standard, multi-plateforme
+- **Architecture MVC** - Pattern architectural standard
+
+#### ✅ **API Standard**
+- **API Platform** - Solution standard pour créer des APIs REST/GraphQL
+- **REST API** - Architecture standard universellement supportée
+- **Standards HTTP** - Protocoles web natifs
+
+#### **Standards de Sécurité**
+- **JWT Authentication** (`lexik/jwt-authentication-bundle`) - Standard ouvert
+- **CORS Bundle** - Standard web pour les API
+- **Symfony Security** - Implémentation des standards de sécurité
+
+#### **Technologies Interopérables**
+- **Twig** - Moteur de templates standard PHP
+- **Monolog** - Logger standard PHP
+- **Mailer Symfony** - Standards email (SMTP, etc.)
+
+### **Points Forts pour l'Interopérabilité**
+1. **📱 Multi-plateformes** : Application web accessible sur tous les terminaux
+2. **🌐 Standards Web** : HTTP, REST, JSON, JWT - standards universels
+3. **🔓 Open Source** : Toutes les technologies utilisées sont open source
+4. **🔄 Portabilité** : Stack déployable sur différents environnements
+5. **⚡ Performance** : Optimisations (compression, caching, lazy loading)
+
+---
+
+BDD
+
+#### **Base de Données** ✅
+- **PostgreSQL** - SGBD relationnel open source, standard SQL
+- **Doctrine ORM/DBAL** - Abstraction standard, multi-SGBD
+
+### **Points Forts PostgreSQL pour l'Interopérabilité**
+1. **📊 Standard SQL** : Conformité aux standards SQL ANSI
+2. **🔓 Open Source** : Pas de dépendance à un éditeur propriétaire
+3. **🌐 Multi-plateforme** : Linux, Windows, macOS
+4. **⚡ Performance** : ACID, transactions, indexation avancée
+5. **🔄 Portabilité** : Export/import standard via SQL, pg_dump
+6. **🛡️ Sécurité** : Chiffrement, authentification standard

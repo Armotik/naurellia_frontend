@@ -1,9 +1,36 @@
 <script setup>
 import { onMounted } from 'vue';
+import { useLogger } from '@/composables/useLogger';
+
+const { logAction } = useLogger();
 
 onMounted(() => {
   document.title = 'Naurellia | Conditions générales d\'utilisation';
 });
+
+// Fonction pour logger les clics sur les liens du sommaire
+function handleSummaryClick(sectionId, sectionName) {
+  logAction('terms_and_conditions', 'summary_link_click', {
+    sectionId: sectionId,
+    sectionName: sectionName,
+    timestamp: Date.now()
+  });
+}
+
+// Fonction pour logger les clics sur les liens mailto
+function handleMailtoClick(emailType) {
+  logAction('terms_and_conditions', 'mailto_click', {
+    emailType: emailType, // 'admin'
+    timestamp: Date.now()
+  });
+}
+
+// Fonction pour logger les clics vers la politique de confidentialité
+function handlePrivacyPolicyClick() {
+  logAction('terms_and_conditions', 'privacy_policy_link_click', {
+    timestamp: Date.now()
+  });
+}
 </script>
 
 <template>
@@ -16,7 +43,7 @@ onMounted(() => {
           Conditions Générales d'Utilisation
         </p>
         <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500 dark:text-gray-400">
-          Dernière mise à jour : 8 juillet 2025
+          Dernière mise à jour : 21 juillet 2025
         </p>
       </div>
 
@@ -25,18 +52,18 @@ onMounted(() => {
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white dark:border-gray-700 border-b border-gray-200 pb-3 mb-6">Sommaire</h2>
         <nav class="mb-12">
           <ul class="space-y-2">
-            <li><a href="#I" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">1. Définitions et objet</a></li>
-            <li><a href="#II" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">2. Acceptation des CGU</a></li>
-            <li><a href="#III" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">3. Description des services Naurellia</a></li>
-            <li><a href="#IV" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">4. Conditions d'accès et inscription</a></li>
-            <li><a href="#V" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">5. Utilisation de la carte interactive</a></li>
-            <li><a href="#VI" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">6. Commentaires et contributions</a></li>
-            <li><a href="#VII" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">7. Obligations et interdictions</a></li>
-            <li><a href="#VIII" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">8. Propriété intellectuelle</a></li>
-            <li><a href="#IX" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">9. Protection des données personnelles</a></li>
-            <li><a href="#X" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">10. Responsabilité et garanties</a></li>
-            <li><a href="#XI" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">11. Suspension et résiliation</a></li>
-            <li><a href="#XII" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">12. Droit applicable et juridiction</a></li>
+            <li><a href="#I" @click="handleSummaryClick('I', 'Définitions et objet')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">1. Définitions et objet</a></li>
+            <li><a href="#II" @click="handleSummaryClick('II', 'Acceptation des CGU')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">2. Acceptation des CGU</a></li>
+            <li><a href="#III" @click="handleSummaryClick('III', 'Description des services Naurellia')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">3. Description des services Naurellia</a></li>
+            <li><a href="#IV" @click="handleSummaryClick('IV', 'Conditions d\'accès et inscription')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">4. Conditions d'accès et inscription</a></li>
+            <li><a href="#V" @click="handleSummaryClick('V', 'Utilisation de la carte interactive')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">5. Utilisation de la carte interactive</a></li>
+            <li><a href="#VI" @click="handleSummaryClick('VI', 'Commentaires et contributions')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">6. Commentaires et contributions</a></li>
+            <li><a href="#VII" @click="handleSummaryClick('VII', 'Obligations et interdictions')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">7. Obligations et interdictions</a></li>
+            <li><a href="#VIII" @click="handleSummaryClick('VIII', 'Propriété intellectuelle')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">8. Propriété intellectuelle</a></li>
+            <li><a href="#IX" @click="handleSummaryClick('IX', 'Protection des données personnelles')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">9. Protection des données personnelles</a></li>
+            <li><a href="#X" @click="handleSummaryClick('X', 'Responsabilité et garanties')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">10. Responsabilité et garanties</a></li>
+            <li><a href="#XI" @click="handleSummaryClick('XI', 'Suspension et résiliation')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">11. Suspension et résiliation</a></li>
+            <li><a href="#XII" @click="handleSummaryClick('XII', 'Droit applicable et juridiction')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400">12. Droit applicable et juridiction</a></li>
           </ul>
         </nav>
 
@@ -301,7 +328,7 @@ onMounted(() => {
             </p>
 
             <p class="mt-4">
-              Pour plus d'informations et exercer vos droits, consultez notre <a href="/privacy-policy" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">Politique de confidentialité</a> ou contactez-nous à <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a>.
+              Pour plus d'informations et exercer vos droits, consultez notre <a href="/privacy-policy" @click="handlePrivacyPolicyClick" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">Politique de confidentialité</a> ou contactez-nous à <a href="mailto:admin@naurellia.com" @click="handleMailtoClick('admin')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a>.
             </p>
           </div>
         </section>
@@ -363,7 +390,21 @@ onMounted(() => {
 
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">11.2 Résiliation par l'Utilisateur</h3>
             <p>
-              L'Utilisateur peut supprimer son compte à tout moment en contactant Naurellia. La suppression entraîne la perte définitive des données associées au compte.
+              L'Utilisateur peut supprimer son compte à tout moment directement depuis son espace personnel via la fonctionnalité de suppression de compte. Cette action lui permet d'exercer son droit à l'effacement de manière autonome.
+            </p>
+
+            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-6">Procédure de suppression autonome :</h4>
+            <ol class="list-decimal list-outside pl-5 space-y-1 mb-4">
+              <li>Vérification préalable du compte par email</li>
+              <li>Connexion à l'espace personnel</li>
+              <li>Accès à la section "Mon compte"</li>
+              <li>Activation du bouton "Supprimer mon compte"</li>
+              <li>Confirmation obligatoire en saisissant le mot "SUPPRIMER"</li>
+              <li>Validation définitive de l'opération</li>
+            </ol>
+
+            <p class="text-sm text-gray-600 dark:text-gray-400 italic">
+              Cette procédure garantit une suppression sécurisée et évite toute suppression accidentelle grâce au mécanisme de double confirmation.
             </p>
 
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">11.3 Effets de la résiliation</h3>
@@ -388,7 +429,7 @@ onMounted(() => {
 
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">12.1 Résolution amiable</h3>
             <p>
-              En cas de litige, les parties s'efforceront de trouver une solution amiable. L'Utilisateur peut contacter Naurellia à <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a> pour exposer sa réclamation.
+              En cas de litige, les parties s'efforceront de trouver une solution amiable. L'Utilisateur peut contacter Naurellia à <a href="mailto:admin@naurellia.com" @click="handleMailtoClick('admin')" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a> pour exposer sa réclamation.
             </p>
 
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">12.2 Modifications des CGU</h3>

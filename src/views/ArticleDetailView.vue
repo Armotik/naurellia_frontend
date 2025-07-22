@@ -3,7 +3,7 @@ import { ref, watch, computed } from 'vue' // MODIFICATION: Ajout de 'computed'
 import { useRoute, useRouter } from 'vue-router' // MODIFICATION: Ajout de 'useRouter'
 import apiClient from '@/services/api'
 import { useAuthStore } from '@/stores/auth'
-import { activityLogger } from '@/services/activityLogger'
+import { useLogger } from '@/composables/useLogger'
 
 // --- State Management ---
 const route = useRoute()
@@ -17,12 +17,13 @@ const error = ref(null)
 const newComment = ref('')
 const isSubmitting = ref(false)
 
-// NOUVEAU: Propriétés calculées pour vérifier les rôles
-const isAdmin = computed(() => authStore.user?.roles.includes('ROLE_ADMIN'));
-const isSuperAdmin = computed(() => authStore.user?.roles.includes('ROLE_SUPER_ADMIN'));
+const isAdmin = computed(() => authStore.user?.roles.includes('ROLE_ADMIN'))
+const isSuperAdmin = computed(() => authStore.user?.roles.includes('ROLE_SUPER_ADMIN'))
+
+const { logFormAction, logAdminAction, logApiError, logAction } = useLogger()
 
 // --- API Fetching ---
-async function fetchArticle(slug, force=false) {
+async function fetchArticle(slug, force = false) {
   isLoading.value = true
   error.value = null
   article.value = null
@@ -30,7 +31,7 @@ async function fetchArticle(slug, force=false) {
   const requestConfig = {}
 
   if (force) {
-    requestConfig.params = { timestamp: new Date().getTime() };
+    requestConfig.params = { timestamp: new Date().getTime() }
   }
 
   try {
@@ -39,6 +40,10 @@ async function fetchArticle(slug, force=false) {
   } catch (err) {
     error.value = "Impossible de charger l'article. Il n'existe peut-être pas."
     console.error("Erreur de chargement de l'article:", err)
+
+    logApiError(`/api/articles/${slug}`, err.response?.status || 0, err.message, {
+      method: 'GET',
+    })
   } finally {
     isLoading.value = false
   }
@@ -46,7 +51,7 @@ async function fetchArticle(slug, force=false) {
 
 // NOUVEAU: Actions d'administration pour l'article
 async function handleToggleFeatured() {
-  if (!article.value) return;
+  if (!article.value) return
 
   try {
     const payload = {
@@ -56,33 +61,56 @@ async function handleToggleFeatured() {
       content: article.value.content,
       category: article.value.category ? '/api/categories/' + article.value.category.id : null,
       isFeatured: !article.value.isFeatured,
-      imageUrl: article.value.imageUrl
-    };
+      imageUrl: article.value.imageUrl,
+    }
     const response = await apiClient.patch(`/api/articles/${article.value.slug}`, payload, {
-      headers: { 'Content-Type': 'application/merge-patch+json' }
-    });
+      headers: { 'Content-Type': 'application/merge-patch+json' },
+    })
     // Met à jour l'état local pour un retour visuel immédiat
-    article.value.isFeatured = response.data.isFeatured;
+    article.value.isFeatured = response.data.isFeatured
+
+    logAdminAction('Toggle Featured Article', 'article', article.value.id, {
+      slug: article.value.slug,
+      title: article.value.title,
+      isFeatured: article.value.isFeatured,
+    })
+
   } catch (err) {
-    console.error("Erreur lors de la mise à jour du statut 'à la une':", err);
-    alert("Une erreur est survenue lors de la mise à jour.");
+    console.error("Erreur lors de la mise à jour du statut 'à la une':", err)
+    logApiError(`/api/articles/${article.value.slug}`, err.response?.status || 0, err.message, {
+      method: 'PATCH',
+      action: 'toggle_featured',
+    })
+    alert('Une erreur est survenue lors de la mise à jour.')
   }
 }
 
 async function handleDeleteArticle() {
-  if (!article.value || !window.confirm('Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible.')) {
-    return;
+  if (
+    !article.value ||
+    !window.confirm(
+      'Êtes-vous sûr de vouloir supprimer cet article ? Cette action est irréversible.',
+    )
+  ) {
+    return
   }
   try {
-    await apiClient.delete(`/api/articles/${article.value.slug}`);
+    await apiClient.delete(`/api/articles/${article.value.slug}`)
     // Redirection vers la page principale du blog après la suppression
-    router.push('/blog');
+    logAdminAction('Delete Article', 'article', article.value?.id || 0, {
+      slug: article.value.slug,
+      title: article.value.title,
+    })
+    router.push('/blog')
   } catch (err) {
-    console.error("Erreur lors de la suppression de l'article:", err);
-    alert("Impossible de supprimer l'article. Vous n'avez peut-être pas les droits nécessaires.");
+    console.error("Erreur lors de la suppression de l'article:", err)
+    logApiError(`/api/articles/${article.value.slug}`, err.response?.status || 0, err.message, {
+      method: 'DELETE',
+      action: 'delete_article',
+    })
+    alert("Impossible de supprimer l'article. Vous n'avez peut-être pas les droits nécessaires.")
   }
 }
-
 
 // --- Comment Actions ---
 async function handleCommentSubmit() {
@@ -93,30 +121,35 @@ async function handleCommentSubmit() {
     const payload = {
       content: newComment.value,
       // Utilisation de l'@id (IRI) pour lier le commentaire à l'article, c'est la méthode préférée par API Platform
-      article: `/api/articles/${article.value.slug}`
+      article: `/api/articles/${article.value.slug}`,
     }
 
     const response = await apiClient.post('/api/comments', payload)
-    const newCommentData = response.data;
+    const newCommentData = response.data
 
-    await activityLogger.log('INFO', 'User posted a new comment', {
-      articleId: article.value.slug,
-      articleTitle: article.value.title,
-      commentId: newCommentData.id
-    });
+    logFormAction('comment', 'submit_success', {
+      articleSlug: article.value.slug,
+      commentId: newCommentData.id,
+      contentLength: newCommentData.content.length,
+    })
 
     newComment.value = ''
     await fetchArticle(route.params.slug, true)
-
   } catch (err) {
     console.error('Erreur lors de la soumission du commentaire:', err)
+
+    logApiError('/api/comments', err.response?.status || 0, err.message, {
+      method: 'POST',
+      action: 'submit_comment',
+      articleSlug: article.value.slug,
+      username: authStore.isAuthenticated ? authStore.user.username : 'Anonyme',
+    })
+
     if (err.response && err.response.status === 400) {
       alert('Erreur de validation: ' + (err.response.data.detail || 'Vérifiez votre commentaire.'))
-    }
-    else if (err.response && err.response.status === 422) {
-      alert('Merci d\'attendre 1 minute entre chaque commentaire.')
-    }
-    else {
+    } else if (err.response && err.response.status === 422) {
+      alert("Merci d'attendre 1 minute entre chaque commentaire.")
+    } else {
       alert('Une erreur est survenue. Vous devez être connecté pour commenter.')
     }
   } finally {
@@ -131,13 +164,26 @@ async function handleDeleteComment(commentId) {
 
   try {
     await apiClient.delete(`/api/comments/${commentId}`)
+
+    if (authStore.isAuthenticated && authStore.isAdmin) {
+      logAdminAction('Delete Comment', 'comment', commentId, {
+        articleSlug: article.value.slug,
+      })
+    } else {
+      logAction('Delete Comment', 'comment', commentId, {
+        articleSlug: article.value.slug,
+        username: authStore.isAuthenticated ? authStore.user.username : 'Anonyme',
+      })
+    }
+
     await fetchArticle(route.params.slug, true)
   } catch (err) {
     console.error('Erreur lors de la suppression du commentaire:', err)
-    alert('Impossible de supprimer le commentaire. Vous n\'avez peut-être pas les droits nécessaires.');
+    alert(
+      "Impossible de supprimer le commentaire. Vous n'avez peut-être pas les droits nécessaires.",
+    )
   }
 }
-
 
 // --- Lifecycle and Watchers ---
 watch(
@@ -182,27 +228,47 @@ function formatDate(dateString) {
 
       <div v-else-if="error" class="text-center py-20">
         <p class="text-xl text-red-600 dark:text-red-400">{{ error }}</p>
-        <RouterLink to="/blog" class="text-blue-600 dark:text-blue-400 hover:underline mt-4">Retour à la liste des articles</RouterLink>
+        <RouterLink to="/blog" class="text-blue-600 dark:text-blue-400 hover:underline mt-4"
+          >Retour à la liste des articles
+        </RouterLink>
       </div>
 
       <article v-else-if="article">
+        <div
+          v-if="isAdmin || isSuperAdmin"
+          class="mb-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border dark:border-gray-700 flex items-center justify-end space-x-4"
+        >
+          <span class="text-sm font-bold text-gray-800 dark:text-gray-200 mr-auto"
+            >Panneau d'administration</span
+          >
 
-        <div v-if="isAdmin || isSuperAdmin" class="mb-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border dark:border-gray-700 flex items-center justify-end space-x-4">
-          <span class="text-sm font-bold text-gray-800 dark:text-gray-200 mr-auto">Panneau d'administration</span>
-
-          <RouterLink :to="`/blog/edit/${article.slug}`" class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-800">
+          <RouterLink
+            :to="`/blog/edit/${article.slug}`"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-800"
+          >
             Modifier
           </RouterLink>
 
-          <button @click="handleToggleFeatured" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800" :class="article.isFeatured ? 'bg-yellow-500 hover:bg-yellow-600 focus:ring-yellow-400' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'">
+          <button
+            @click="handleToggleFeatured"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+            :class="
+              article.isFeatured
+                ? 'bg-yellow-500 hover:bg-yellow-600 focus:ring-yellow-400'
+                : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+            "
+          >
             {{ article.isFeatured ? 'Retirer de la une' : 'Mettre à la une' }}
           </button>
 
-          <button v-if="isSuperAdmin" @click="handleDeleteArticle" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800">
+          <button
+            v-if="isSuperAdmin"
+            @click="handleDeleteArticle"
+            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800"
+          >
             Supprimer
           </button>
         </div>
-
 
         <div class="text-center mb-8">
           <p
@@ -211,7 +277,9 @@ function formatDate(dateString) {
           >
             {{ article.category.name }}
           </p>
-          <h1 class="mt-2 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
+          <h1
+            class="mt-2 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl"
+          >
             {{ article.title }}
           </h1>
           <p class="mt-6 text-md text-gray-500 dark:text-gray-400">
@@ -220,7 +288,9 @@ function formatDate(dateString) {
           </p>
         </div>
 
-        <div class="h-96 bg-gray-200 dark:bg-gray-700 rounded-lg mb-12 flex items-center justify-center">
+        <div
+          class="h-96 bg-gray-200 dark:bg-gray-700 rounded-lg mb-12 flex items-center justify-center"
+        >
           <img
             v-if="article.imageUrl"
             :src="article.imageUrl"
@@ -243,7 +313,10 @@ function formatDate(dateString) {
           </svg>
         </div>
 
-        <div class="article-content prose prose-lg max-w-none dark:prose-invert" v-html="article.content"></div>
+        <div
+          class="article-content prose prose-lg max-w-none dark:prose-invert"
+          v-html="article.content"
+        ></div>
 
         <div class="mt-16 border-t dark:border-gray-700 pt-10">
           <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
@@ -271,10 +344,12 @@ function formatDate(dateString) {
           <div v-else class="text-center bg-gray-100 dark:bg-gray-800 p-4 rounded-md">
             <p class="dark:text-gray-300">
               Vous devez être
-              <RouterLink to="/login" class="font-medium text-green-700 dark:text-green-500 hover:underline"
-              >connecté</RouterLink
-              > et vérifié
-              pour poster un commentaire.
+              <RouterLink
+                to="/login"
+                class="font-medium text-green-700 dark:text-green-500 hover:underline"
+                >connecté
+              </RouterLink>
+              et vérifié pour poster un commentaire.
             </p>
           </div>
 
@@ -284,7 +359,9 @@ function formatDate(dateString) {
             </div>
             <div v-else v-for="comment in article.comments" :key="comment.id" class="flex">
               <div class="flex-shrink-0 mr-4">
-                <div class="h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                <div
+                  class="h-10 w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -303,17 +380,27 @@ function formatDate(dateString) {
                 <div class="flex justify-between items-start">
                   <div>
                     <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {{ comment.author.username || 'Utilisateur Anonyme' }}
+                      {{
+                        comment.authorDisplayName ||
+                        comment.author?.username ||
+                        'Utilisateur Anonyme'
+                      }}
                     </div>
                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                      <time :datetime="comment.createdAt">{{
-                          formatDate(comment.createdAt)
-                        }}</time>
+                      <time :datetime="comment.createdAt"
+                        >{{ formatDate(comment.createdAt) }}
+                      </time>
                     </div>
                   </div>
 
                   <button
-                    v-if="authStore.isAuthenticated && authStore.user && (isAdmin || isSuperAdmin || authStore.user.username === comment.author.username)"
+                    v-if="
+                      authStore.isAuthenticated &&
+                      authStore.user &&
+                      (isAdmin ||
+                        isSuperAdmin ||
+                        (comment.author && authStore.user.username === comment.author.username))
+                    "
                     @click="handleDeleteComment(comment.id)"
                     class="ml-4 text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:underline focus:outline-none"
                     title="Supprimer ce commentaire"

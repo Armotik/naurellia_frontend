@@ -5,6 +5,7 @@ import { activityLogger } from '@/services/activityLogger' // 1. On importe notr
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
 import JsonLdData from './components/JsonLdData.vue'
+import LegalDocumentsBanner from './components/LegalDocumentsBanner.vue'
 import { useBatteryStatus } from './composables/useBatteryStatus';
 
 // Utilisation du composable pour le mode économie d'énergie
@@ -62,6 +63,7 @@ router.afterEach((to, from) => {
   >
     <JsonLdData type="Organization" />
     <Navbar />
+    <LegalDocumentsBanner />
     <main class="flex-grow">
       <div v-if="isBatterySaving" class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs py-1 px-2 text-center">
         Mode économie d'énergie activé

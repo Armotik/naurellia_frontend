@@ -1,0 +1,56 @@
+Titre : Le service numérique repose-t-il sur des API documentées et ouvertes pour interagir avec le matériel ?
+
+Objectif :
+
+Un objet connecté ou un périphérique interagit avec son environnement via des API (interfaces d'accès dédiées aux programmes), généralement appelées via un programme (« pilote » ou « driver »), ou une application sur un smartphone.
+
+    Lorsque ces API ne sont pas ouvertes, il est souvent impossible de prolonger la durée de vie de l'objet au-delà de celle de l'application ou pilote initialement conçu pour l'objet : si ce logiciel est abandonné, un objet ou un périphérique parfaitement fonctionnel devient inutilisable.
+
+    Lorsque les API sont ouvertes (documentées et d'usage libre), il est possible pour un développeur tiers de développer une application alternative et de prolonger la vie de l'objet ou du périphérique.
+
+Le logiciel libre permet de pallier cette obsolescence à condition que les API et formats soient documentés et ouverts, seul moyen pour des développeurs tiers de logiciels de développer des alternatives afin que ces objets ou périphériques restent utilisables dans le temps. Cela permet également de faire fonctionner l'objet connecté ou le périphérique sur des systèmes d'exploitation non supportés par le concepteur du matériel.
+
+Mise en œuvre :
+
+Si le logiciel/pilote est associé à un équipement, terminal ou périphérique, le concepteur doit fournir des API ouvertes et documentées, afin de permettre que d'autres services numériques alternatifs puissent être utilisés sur l'appareil en cas de défaut ou d'abandon du logiciel, afin de prolonger la vie de l'objet ou du périphérique.
+
+Moyen de test ou de contrôle :
+
+Si le service numérique repose sur l'utilisation d'un terminal, équipement, appareil, le fournisseur doit rendre disponibles les API nécessaires à l'exploitation de l'objet connecté. Les API du périphérique doivent être documentées et d'usage libre, afin qu'un programme ou pilote alternatif puisse être créé pour prolonger la durée de vie de l'objet ou du périphérique.
+
+---
+
+Pour Naurellia :
+
+API entièrement ouverte et documentée sur www.api.naurellia.com/api
+
+En revanche comme détaillé dans le critère 1.8, certains endpoints de l'API nécessitent une authentification et/ou des permissions spécifiques pour accéder à certaines fonctionnalités ou données. Cela est nécessaire pour garantir la sécurité et la confidentialité des utilisateurs, mais n'empêche pas le développement d'applications tierces tant que les conditions d'accès sont respectées.
+
+ API publique totalement accessible
+
+API Endpoint: https://api.naurellia.com/api/
+
+API REST avec endpoints publics et authentifiés pour maximum de flexibilité
+
+Endpoints publics (sans authentification)
+
+    • GET /api/point_of_interests/ - Liste des points d'intérêt
+    • GET /api/point_of_interests/{id} - Détail d'un point d'intérêt
+    • GET /api/articles/ - Liste des articles du blog
+    • GET /api/articles/{slug} - Détail d'un article
+    • GET /api/ - Documentation API et informations générales
+    • POST /api/users - Création de compte utilisateur
+    • POST /api/login_check - Authentification utilisateur
+    • POST /api/contact - Envoi de messages de contact
+    • POST /api/partner-inquiry - Demandes de partenariat
+    • POST /api/logs/frontend - Logging des événements frontend
+    • POST /api/reset-password - Réinitialisation de mot de passe
+
+Endpoints authentifiés (JWT requis)
+
+    • Gestion utilisateur : Modification profil, changement mot de passe
+    • Administration : Gestion des utilisateurs, consultation des logs
+    • Contenu : Création/modification d'articles (admin uniquement)
+    • Modération : Validation des contenus, gestion des partenariats
+
+L'authentification se fait via JWT obtenu avec /api/login_check

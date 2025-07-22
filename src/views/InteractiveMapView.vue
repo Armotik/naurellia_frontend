@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue';
 import apiClient from '@/services/api';
 import { useAuthStore } from '@/stores/auth';
 import { activityLogger } from '@/services/activityLogger';
+import { useLogger } from '@/composables/useLogger';
 import {
   LMap,
   LTileLayer,
@@ -14,6 +15,7 @@ import {
 // === CONFIGURATION ET STORES ===
 const authStore = useAuthStore();
 const geoapifyApiKey = import.meta.env.VITE_GEOAPIFY_API_KEY;
+const { logMapAction, logApiError, logAdminAction } = useLogger();
 
 // Configuration initiale de la carte (centré sur l'Île de Ré)
 const initialZoom = 12;
@@ -35,6 +37,10 @@ const center = ref([46.195, -1.37]);
 const selectedPoiTypes = ref([]); // Types de POI sélectionnés dans les filtres
 const map = ref(null); // Référence à l'instance Leaflet
 
+// Gestion de la recherche
+const searchQuery = ref('');
+const isSearching = ref(false);
+
 // Gestion du mode édition (admin uniquement)
 const isEditMode = ref(false);
 const isPoiModalOpen = ref(false);
@@ -48,13 +54,101 @@ const isGeocoding = ref(false);
 // Interface utilisateur mobile
 const isAsideOpen = ref(false); // Contrôle l'affichage du panneau latéral sur mobile
 
-// Fonctionnalité de recherche
-const searchQuery = ref(''); // Terme de recherche saisi par l'utilisateur
-const isSearching = ref(false); // Indicateur de recherche en cours (debounce)
+// === FONCTIONS DE TRACKING ===
+function handlePoiClick(poi) {
+  logMapAction('poi_click', {
+    poiId: poi.id,
+    poiName: poi.name,
+    poiType: poi.type?.name,
+    poiTypeId: poi.type?.id,
+    coordinates: {
+      lat: poi.latitude,
+      lng: poi.longitude
+    },
+    currentZoom: zoom.value,
+    hasActiveFilters: selectedPoiTypes.value.length > 0
+  });
+}
 
-// Configuration de la couche de tuiles OpenStreetMap
-const tileLayerUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const tileLayerAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+function handleFilterUse(typeId, typeName, isChecked) {
+  logMapAction('filter_use', {
+    filterType: 'poi_type',
+    typeId: typeId,
+    typeName: typeName,
+    action: isChecked ? 'add' : 'remove',
+    activeFilters: selectedPoiTypes.value,
+    totalPoisVisible: filteredPois.value.length
+  });
+}
+
+function handleMapZoom(newZoom, oldZoom) {
+  logMapAction('zoom_change', {
+    newZoom: newZoom,
+    oldZoom: oldZoom,
+    zoomDirection: newZoom > oldZoom ? 'in' : 'out',
+    centerCoordinates: {
+      lat: center.value[0],
+      lng: center.value[1]
+    }
+  });
+}
+
+function handleMapMove(newCenter, oldCenter) {
+  // Log seulement si le mouvement est significatif (> 0.001 degrés)
+  const distance = Math.abs(newCenter[0] - oldCenter[0]) + Math.abs(newCenter[1] - oldCenter[1]);
+  if (distance > 0.001) {
+    logMapAction('map_move', {
+      newCenter: {
+        lat: newCenter[0],
+        lng: newCenter[1]
+      },
+      oldCenter: {
+        lat: oldCenter[0],
+        lng: oldCenter[1]
+      },
+      currentZoom: zoom.value
+    });
+  }
+}
+
+function handleMapRecenter() {
+  logMapAction('recenter_map', {
+    previousCenter: {
+      lat: center.value[0],
+      lng: center.value[1]
+    },
+    newCenter: {
+      lat: initialCenter[0],
+      lng: initialCenter[1]
+    },
+    previousZoom: zoom.value,
+    newZoom: initialZoom
+  });
+
+  center.value = [...initialCenter];
+  zoom.value = initialZoom;
+}
+
+function handleSearchInput(query) {
+  if (query.trim().length >= 3) {
+    logMapAction('search_use', {
+      searchQuery: query.trim(),
+      queryLength: query.trim().length,
+      currentFilters: selectedPoiTypes.value
+    });
+  }
+}
+
+function handlePoiDetailsView(poi) {
+  logMapAction('poi_details_view', {
+    poiId: poi.id,
+    poiName: poi.name,
+    poiType: poi.type?.name,
+    viewMethod: 'popup', // ou 'modal' selon l'interface
+    hasImages: poi.images && poi.images.length > 0,
+    hasDescription: !!poi.description
+  });
+}
 
 // === FONCTIONS UTILITAIRES ===
 
@@ -64,6 +158,12 @@ const tileLayerAttribution = '&copy; <a href="https://www.openstreetmap.org/copy
 function recenterMap() {
   if (map.value) {
     map.value.leafletObject.flyTo(initialCenter, initialZoom);
+    logMapAction('recenter_map', {
+      previousCenter: center.value,
+      previousZoom: zoom.value,
+      newCenter: initialCenter,
+      newZoom: initialZoom
+    });
   }
 }
 
@@ -109,6 +209,10 @@ async function fetchData(force = false) {
   } catch (err) {
     error.value = "Impossible de charger les données de la carte.";
     console.error("Erreur lors du chargement des données :", err);
+    logApiError('/api/point_of_interests', err.response?.status || 0, err.message, {
+      searchQuery: searchQuery.value,
+      force: force
+    });
   } finally {
     isLoading.value = false;
     isSearching.value = false;
@@ -525,7 +629,7 @@ onMounted(() => {
             <!-- Champ de recherche avec debounce -->
             <input
               v-model="searchQuery"
-              @input="searchPois"
+              @input="handleSearchInput(searchQuery)"
               type="text"
               placeholder="Rechercher un point d'intérêt..."
               class="w-full pl-10 pr-10 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-green-500 dark:focus:ring-green-400 focus:border-green-500 dark:focus:border-green-400 text-sm"
@@ -575,7 +679,14 @@ onMounted(() => {
           <!-- Liste des types de POI disponibles (avec POI associés uniquement) -->
           <div class="space-y-4">
             <div v-for="poiType in availablePoiTypes" :key="poiType.id" class="flex items-center">
-              <input type="checkbox" :id="'type-' + poiType.id" :value="poiType.id" v-model="selectedPoiTypes" class="h-5 w-5 rounded border-gray-300 dark:border-gray-600 text-green-600 dark:text-green-500 focus:ring-green-500 dark:focus:ring-green-600 cursor-pointer"/>
+              <input
+                type="checkbox"
+                :id="'type-' + poiType.id"
+                :value="poiType.id"
+                v-model="selectedPoiTypes"
+                @change="handleFilterUse(poiType.id, poiType.name, $event.target.checked)"
+                class="h-5 w-5 rounded border-gray-300 dark:border-gray-600 text-green-600 dark:text-green-500 focus:ring-green-500 dark:focus:ring-green-600 cursor-pointer"
+              />
               <label :for="'type-' + poiType.id" class="ml-3 text-gray-700 dark:text-gray-300 select-none cursor-pointer flex items-center">
                 <img :src="getMarkerIconUrl(poiType)" alt="" class="h-6 w-6 mr-2 object-contain" loading="lazy" />
                 <span>{{ poiType.name }}</span>
@@ -620,7 +731,7 @@ onMounted(() => {
 
         <!-- === UTILITAIRES === -->
         <div class="mt-6 pt-6 border-t dark:border-gray-700">
-          <button @click="recenterMap" class="w-full flex items-center justify-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 text-sm font-semibold">
+          <button @click="handleMapRecenter" class="w-full flex items-center justify-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 text-sm font-semibold">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2"><path d="M9.653 16.915l.005-.003-.011.006.006-.003ZM10 18a8 8 0 100-16 8 8 0 000 16ZM1.5 10a8.5 8.5 0 1117 0 8.5 8.5 0 01-17 0Z" /><path d="M10 4.75a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 4.75Z" /><path d="M10 8a2 2 0 100 4 2 2 0 000-4Z" /></svg>
             Recentrer la carte
           </button>
@@ -630,9 +741,22 @@ onMounted(() => {
       <!-- === ZONE DE CARTE PRINCIPALE === -->
       <main class="flex-grow h-full relative z-0" :class="{ 'cursor-crosshair': isEditMode || isPickingCoordinates }">
         <!-- Composant Leaflet Map -->
-        <l-map ref="map" v-model:zoom="zoom" :center="center" :use-global-leaflet="false" @click="handleMapClick" class="h-full dark:bg-gray-800 dark:text-gray-200 [&_.leaflet-tile-pane]:dark:brightness-[0.85] [&_.leaflet-tile-pane]:dark:contrast-[0.9] [&_.leaflet-tile-pane]:dark:invert-[0.1]">
+        <l-map
+          ref="map"
+          v-model:zoom="zoom"
+          :center="center"
+          :use-global-leaflet="false"
+          @click="handleMapClick"
+          @update:zoom="handleMapZoom($event, zoom)"
+          @update:center="handleMapMove($event, center)"
+          class="h-full dark:bg-gray-800 dark:text-gray-200 [&_.leaflet-tile-pane]:dark:brightness-[0.85] [&_.leaflet-tile-pane]:dark:contrast-[0.9] [&_.leaflet-tile-pane]:dark:invert-[0.1]"
+        >
           <!-- Couche de tuiles OpenStreetMap -->
-          <l-tile-layer :url="tileLayerUrl" :attribution="tileLayerAttribution"></l-tile-layer>
+          <l-tile-layer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            :max-zoom="19"
+          />
 
           <!-- Marqueurs POI avec popups -->
           <l-marker
@@ -641,12 +765,17 @@ onMounted(() => {
             :lat-lng="[poi.latitude, poi.longitude]"
             :draggable="isEditMode"
             @dragend="handleMarkerDragEnd(poi, $event)"
+            @click="handlePoiClick(poi)"
           >
             <!-- Icône personnalisée du marqueur -->
             <l-icon :icon-url="getMarkerIconUrl(poi.type, poi)" :icon-size="[38, 52]" :icon-anchor="[19, 50]" :popup-anchor="[0, -50]" />
 
             <!-- Popup d'informations du POI -->
-            <l-popup :min-width="250" class="leaflet-popup-custom">
+            <l-popup
+              :min-width="250"
+              class="leaflet-popup-custom"
+              @add="handlePoiDetailsView(poi)"
+            >
               <!-- Nom du POI -->
               <div class="font-bold text-lg -mb-1 text-gray-800 dark:text-white">{{ poi.name }}</div>
 

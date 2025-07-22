@@ -1,9 +1,26 @@
 <script setup>
 import { onMounted } from 'vue';
+import { useLogger } from '@/composables/useLogger';
+
+const { logAction } = useLogger();
 
 onMounted(() => {
   document.title = 'Naurellia | Mentions légales';
 });
+
+// Fonction pour logger les clics sur les liens
+function handlePrivacyPolicyClick() {
+  logAction('legal_mentions', 'privacy_policy_link_click', {
+    timestamp: Date.now()
+  });
+}
+
+function handleMailtoClick(emailType) {
+  logAction('legal_mentions', 'mailto_click', {
+    emailType: emailType, // 'admin' ou 'support'
+    timestamp: Date.now()
+  });
+}
 </script>
 
 <template>
@@ -16,7 +33,7 @@ onMounted(() => {
           Mentions Légales
         </p>
         <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500 dark:text-gray-400">
-          En vigueur au 8 juillet 2025
+          En vigueur au 21 juillet 2025
         </p>
       </div>
 
@@ -31,7 +48,7 @@ onMounted(() => {
           <p><strong class="font-semibold text-gray-900 dark:text-white">Anthony MUDET</strong></p>
           <p><strong class="font-semibold text-gray-900 dark:text-white">Statut :</strong> Personne physique - Projet personnel non commercial</p>
           <p><strong class="font-semibold text-gray-900 dark:text-white">Adresse :</strong> 3 Chemin des Genêts, 17740 Sainte-Marie-De-Ré, Nouvelle-Aquitaine FRANCE</p>
-          <p><strong class="font-semibold text-gray-900 dark:text-white">Email :</strong> <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a></p>
+          <p><strong class="font-semibold text-gray-900 dark:text-white">Email :</strong> <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline" @click="handleMailtoClick('admin')">admin@naurellia.com</a></p>
           <p><strong class="font-semibold text-gray-900 dark:text-white">Téléphone :</strong> 07 71 14 20 02</p>
           <p><strong class="font-semibold text-gray-900 dark:text-white">SIRET/SIREN :</strong> Non applicable (projet personnel)</p>
           <p><strong class="font-semibold text-gray-900 dark:text-white">Numéro TVA :</strong> Non applicable</p>
@@ -143,10 +160,13 @@ onMounted(() => {
             <li>Analyse d'usage pour l'amélioration du service</li>
           </ul>
           <p>
-            Pour plus d'informations, consultez notre <a href="/privacy-policy" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">Politique de confidentialité</a>.
+            Pour plus d'informations, consultez notre <a href="/privacy-policy" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline" @click="handlePrivacyPolicyClick">Politique de confidentialité</a>.
           </p>
           <p>
-            Vous pouvez exercer vos droits (accès, rectification, suppression, opposition) en contactant : <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a>.
+            Vous pouvez exercer vos droits (accès, rectification, suppression, opposition) en contactant : <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline" @click="handleMailtoClick('admin')">admin@naurellia.com</a>.
+          </p>
+          <p>
+            <strong class="font-semibold text-gray-900 dark:text-white">Suppression de compte :</strong> Vous pouvez à tout moment supprimer votre compte utilisateur directement depuis votre espace personnel. Cette action entraînera la suppression immédiate de vos informations personnelles, à l'exception des données nécessaires pour des obligations légales ou des fins statistiques anonymisées. La procédure requiert une confirmation explicite par saisie du mot "SUPPRIMER" pour éviter toute suppression accidentelle. L'action de suppression est automatiquement enregistrée dans nos logs de sécurité pour assurer la traçabilité et la conformité légale.
           </p>
         </div>
 

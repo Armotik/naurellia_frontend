@@ -12,6 +12,10 @@ import router from './router'
 import { VSkeletonLoader } from 'vuetify/components'
 import { createVuetify } from 'vuetify'
 import lazyBackground from './directives/lazyBackgroundDirective';
+import { trackingDirective, hoverTrackingDirective } from './directives/trackingDirective';
+
+// Initialiser le logger
+import logger from './services/logger';
 
 const vuetify = createVuetify({
   components: {
@@ -31,5 +35,7 @@ themeStore.initTheme();
 app.use(router)
 app.use(vuetify)
 app.directive('lazy-background', lazyBackground);
+app.directive('track', trackingDirective);
+app.directive('track-hover', hoverTrackingDirective);
 
 app.mount('#app')

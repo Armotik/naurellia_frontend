@@ -33,12 +33,20 @@ export const useThemeStore = defineStore('theme', () => {
 
   // Action appelée par le bouton pour changer de thème
   const setTheme = (newTheme) => {
+    const oldTheme = theme.value;
+
     if (newTheme === 'system') {
       localStorage.removeItem('theme');
     } else {
       localStorage.setItem('theme', newTheme);
     }
+
     applyTheme(); // On applique immédiatement le nouveau thème
+
+    // Logger le changement de préférence
+    import('@/services/logger').then(({ logger }) => {
+      logger.logPreferenceChange('theme', oldTheme, newTheme);
+    });
   };
 
   // Initialise le thème au chargement et écoute les changements du système

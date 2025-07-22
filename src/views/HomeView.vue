@@ -2,12 +2,15 @@
 import { ref, onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import apiClient from '@/services/api';
+import { useLogger } from '@/composables/useLogger';
 
 import heroImage from '@/assets/img/ile-de-re-pont.webp';
 
 const featuredArticle = ref(null);
 const isLoading = ref(true);
 const error = ref(null);
+
+const { logHomeAction, logApiError } = useLogger();
 
 async function fetchFeaturedArticle() {
   try {
@@ -25,6 +28,9 @@ async function fetchFeaturedArticle() {
   } catch (err) {
     error.value = "Impossible de charger l'article à la une pour le moment.";
     console.error("Erreur de chargement de l'article:", err);
+    logApiError('/api/articles', err.response?.status || 0, err.message, {
+      params: { isFeatured: true, 'order[publishedAt]': 'desc', itemsPerPage: 1 }
+    });
   } finally {
     isLoading.value = false;
   }
@@ -39,6 +45,23 @@ function getExcerpt(content, length = 150) {
   const text = content.replace(/<[^>]*>/g, '');
   if (text.length <= length) return text;
   return text.substring(0, length) + '...';
+}
+
+// Fonctions de tracking
+function handleStartVisitClick() {
+  logHomeAction('start_visit_click', {
+    buttonLocation: 'hero_section',
+    action: 'scroll_to_discover'
+  });
+}
+
+function handleReadFullArticleClick() {
+  logHomeAction('read_full_article_click', {
+    articleId: featuredArticle.value?.id,
+    articleSlug: featuredArticle.value?.slug,
+    articleTitle: featuredArticle.value?.title,
+    buttonLocation: 'featured_section'
+  });
 }
 </script>
 
@@ -58,7 +81,11 @@ function getExcerpt(content, length = 150) {
         </p>
         <div class="mt-8 flex justify-center">
           <div class="inline-flex rounded-md shadow-lg">
-            <a href="#decouvrir" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-gray-900 bg-green-50 hover:bg-green-200 dark:bg-green-800 dark:text-white dark:hover:bg-green-700 hc:bg-yellow-300 hc:text-black hc:hover:bg-yellow-400">
+            <a
+              href="#decouvrir"
+              @click="handleStartVisitClick"
+              class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-gray-900 bg-green-50 hover:bg-green-200 dark:bg-green-800 dark:text-white dark:hover:bg-green-700 hc:bg-yellow-300 hc:text-black hc:hover:bg-yellow-400"
+            >
               Commencer la visite
             </a>
           </div>
@@ -111,7 +138,11 @@ function getExcerpt(content, length = 150) {
         <p class="mt-4 text-lg leading-6 text-gray-300 hc:text-gray-400">
           {{ getExcerpt(featuredArticle.content) }}
         </p>
-        <RouterLink :to="`/blog/articles/${featuredArticle.slug}`" class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-green-700 dark:text-white bg-white dark:bg-green-700 hover:bg-gray-100 dark:hover:bg-green-600 sm:w-auto hc:bg-yellow-300 hc:text-black hc:hover:bg-yellow-400">
+        <RouterLink
+          :to="`/blog/articles/${featuredArticle.slug}`"
+          @click="handleReadFullArticleClick"
+          class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-green-700 dark:text-white bg-white dark:bg-green-700 hover:bg-gray-100 dark:hover:bg-green-600 sm:w-auto hc:bg-yellow-300 hc:text-black hc:hover:bg-yellow-400"
+        >
           Lire l'article complet
         </RouterLink>
       </div>

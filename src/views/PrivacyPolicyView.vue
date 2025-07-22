@@ -1,9 +1,20 @@
 <script setup>
 import { onMounted } from 'vue';
+import { useLogger } from '@/composables/useLogger';
+
+const { logAction } = useLogger();
 
 onMounted(() => {
   document.title = 'Naurellia | Politique de Confidentialité';
 });
+
+// Fonction pour logger les clics sur les liens mailto
+function handleMailtoClick(emailType) {
+  logAction('privacy_policy', 'mailto_click', {
+    emailType: emailType, // 'admin'
+    timestamp: Date.now()
+  });
+}
 </script>
 
 <template>
@@ -16,7 +27,7 @@ onMounted(() => {
           Politique de Confidentialité
         </p>
         <p class="max-w-xl mt-5 mx-auto text-xl text-gray-500 dark:text-gray-400">
-          Dernière mise à jour : 8 juillet 2025
+          Dernière mise à jour : 21 juillet 2025
         </p>
       </div>
 
@@ -30,7 +41,7 @@ onMounted(() => {
           Le responsable du traitement des données personnelles est :<br>
           <strong class="font-semibold text-gray-900 dark:text-white">Anthony MUDET</strong><br>
           Adresse : 3 Chemin des Genêts, 17740 Sainte-Marie-De-Ré, Nouvelle-Aquitaine FRANCE<br>
-          Email : <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a>
+          Email : <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline" @click="handleMailtoClick('admin')">admin@naurellia.com</a>
         </p>
 
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3 mb-6 mt-12">Article 2 : Données personnelles collectées</h2>
@@ -117,8 +128,35 @@ onMounted(() => {
           <li><strong class="font-semibold text-gray-900 dark:text-white">Droit à la portabilité :</strong> Récupérer vos données dans un format structuré.</li>
           <li><strong class="font-semibold text-gray-900 dark:text-white">Droit de retrait du consentement :</strong> Annuler votre consentement à tout moment.</li>
         </ul>
+
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 mt-6">6.1 Suppression de compte utilisateur</h3>
+        <p class="mb-4">
+          Vous pouvez supprimer votre compte à tout moment directement depuis votre espace personnel. Cette fonctionnalité vous permet d'exercer votre droit à l'effacement de manière autonome et immédiate.
+        </p>
+
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-6">Procédure de suppression :</h4>
+        <ol class="list-decimal list-outside pl-5 space-y-1 mb-4">
+          <li>Connexion à votre compte vérifié</li>
+          <li>Accès à la page "Mon compte"</li>
+          <li>Clic sur le bouton "Supprimer mon compte"</li>
+          <li>Confirmation en saisissant le mot "SUPPRIMER"</li>
+          <li>Validation de la suppression définitive</li>
+        </ol>
+
+        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 mt-6">Conséquences de la suppression :</h4>
+        <ul class="list-disc list-outside pl-5 space-y-1 mb-4">
+          <li><strong class="font-semibold text-gray-900 dark:text-white">Données supprimées immédiatement :</strong> Identifiants de connexion, informations de profil, préférences personnelles, tokens d'authentification</li>
+          <li><strong class="font-semibold text-gray-900 dark:text-white">Commentaires :</strong> Conservés mais anonymisés (nom d'utilisateur remplacé par "Utilisateur supprimé")</li>
+          <li><strong class="font-semibold text-gray-900 dark:text-white">Logs de sécurité :</strong> Conservés pour leur durée légale (1 an) avec pseudonymisation</li>
+          <li><strong class="font-semibold text-gray-900 dark:text-white">Action loggée :</strong> La suppression de compte est enregistrée à des fins de sécurité et de traçabilité</li>
+        </ul>
+
+        <p class="mb-4 text-sm text-gray-600 dark:text-gray-400 italic">
+          <strong>Important :</strong> La suppression de compte est définitive et irréversible. Aucune récupération de données ne sera possible après confirmation de l'opération.
+        </p>
+
         <p class="mt-4">
-          <strong>Pour exercer ces droits :</strong> Contactez-nous à <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline">admin@naurellia.com</a> avec une pièce d'identité. Délai de réponse : 1 mois maximum.
+          <strong>Pour exercer ces droits :</strong> Contactez-nous à <a href="mailto:admin@naurellia.com" class="text-green-700 dark:text-green-500 hover:text-green-800 dark:hover:text-green-400 underline" @click="handleMailtoClick('admin')">admin@naurellia.com</a> avec une pièce d'identité. Délai de réponse : 1 mois maximum.
         </p>
         <p class="mt-4">
           <strong>Droit de réclamation :</strong> Vous pouvez porter réclamation auprès de la CNIL (www.cnil.fr) si vous estimez que vos droits ne sont pas respectés.
